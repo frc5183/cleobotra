@@ -14,13 +14,16 @@ import javax.xml.stream.Location
 interface SwerveModuleConstants {
     val NAME: String
     val LOCATION: Translation2d
+
+    val DRIVE_MOTOR: SwerveMotor
+    val DRIVE_MOTOR_INVERTED: Boolean
+
+    val ANGLE_MOTOR: SwerveMotor
+    val ANGLE_MOTOR_INVERTED: Boolean
+
     val ABSOLUTE_ENCODER: SwerveAbsoluteEncoder
     val ABSOLUTE_ENCODER_OFFSET: Angle
     val ABSOLUTE_ENCODER_INVERTED: Boolean
-    val DRIVE_MOTOR: SwerveMotor
-    val DRIVE_MOTOR_INVERTED: Boolean
-    val ANGLE_MOTOR: SwerveMotor
-    val ANGLE_MOTOR_INVERTED: Boolean
 
     val YAGSL: SwerveModuleConfiguration
         get() = SwerveModuleConfiguration(

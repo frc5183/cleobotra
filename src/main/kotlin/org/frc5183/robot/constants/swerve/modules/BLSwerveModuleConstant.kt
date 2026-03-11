@@ -10,12 +10,15 @@ import swervelib.motors.TalonFXSwerve
 
 object BLSwerveModuleConstant : SwerveModuleConstants {
     override val NAME: String = "backleft"
-    override val LOCATION: Translation2d = Translation2d(Units.Inches.of(12.5), Units.Inches.of(-12.0))
-    override val ABSOLUTE_ENCODER: SwerveAbsoluteEncoder = CANCoderSwerve(16)
-    override val ABSOLUTE_ENCODER_OFFSET: Angle = Units.Degrees.of(72.598)
+    override val LOCATION: Translation2d = Translation2d(Units.Inches.of(-9.3125), Units.Inches.of(12.75))
+
+    override val DRIVE_MOTOR: SwerveMotor = TalonFXSwerve(31, true, SwerveModulePhysicalConstants.MOTOR_TYPE)
+    override val DRIVE_MOTOR_INVERTED: Boolean = true
+
+    override val ANGLE_MOTOR: SwerveMotor = TalonFXSwerve(32, false, SwerveModulePhysicalConstants.MOTOR_TYPE)
+    override val ANGLE_MOTOR_INVERTED: Boolean = true
+
+    override val ABSOLUTE_ENCODER: SwerveAbsoluteEncoder = CANCoderSwerve(33)
+    override val ABSOLUTE_ENCODER_OFFSET: Angle = Units.Rotations.of(0.309)
     override val ABSOLUTE_ENCODER_INVERTED: Boolean = false
-    override val DRIVE_MOTOR: SwerveMotor = TalonFXSwerve(17, true, SwerveModulePhysicalConstants.MOTOR_TYPE)
-    override val DRIVE_MOTOR_INVERTED: Boolean = false
-    override val ANGLE_MOTOR: SwerveMotor = TalonFXSwerve(18, true, SwerveModulePhysicalConstants.MOTOR_TYPE)
-    override val ANGLE_MOTOR_INVERTED: Boolean = false
 }
