@@ -3,6 +3,7 @@ package org.frc5183.robot.subsystems.drive
 import com.pathplanner.lib.commands.PathfindingCommand
 import com.pathplanner.lib.pathfinding.Pathfinding
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.CommandScheduler
@@ -69,6 +70,8 @@ class SwerveDriveSubsystem(
     fun setMotorBrake(brake: Boolean) = io.setMotorBrake(brake)
 
     fun resetPose(pose: Pose2d = Pose2d.kZero) = io.resetPose(pose)
+
+    fun getTargetSpeeds(x: Double, y: Double, angle: Rotation2d) = io.getTargetSpeeds(x, y, angle)
 
     fun drive(
         translation: Translation2d,

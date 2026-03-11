@@ -13,10 +13,10 @@ object FRSwerveModuleConstant : SwerveModuleConstants {
     override val LOCATION: Translation2d = Translation2d(Units.Inches.of(9.3125), Units.Inches.of(-12.75))
 
     override val DRIVE_MOTOR: SwerveMotor = TalonFXSwerve(21, true, SwerveModulePhysicalConstants.MOTOR_TYPE)
-    override val DRIVE_MOTOR_INVERTED: Boolean = true
+    override val DRIVE_MOTOR_INVERTED: Boolean = false
 
     override val ANGLE_MOTOR: SwerveMotor = TalonFXSwerve(22, false, SwerveModulePhysicalConstants.MOTOR_TYPE)
-    override val ANGLE_MOTOR_INVERTED: Boolean = true
+    override val ANGLE_MOTOR_INVERTED: Boolean = false
 
     override val ABSOLUTE_ENCODER: SwerveAbsoluteEncoder = CANCoderSwerve(23)
     override val ABSOLUTE_ENCODER_OFFSET: Angle = Units.Rotations.of(-0.183)

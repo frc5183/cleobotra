@@ -9,7 +9,6 @@ import swervelib.imu.NavXSwerve
 import swervelib.imu.SwerveIMU
 import swervelib.parser.SwerveControllerConfiguration
 import swervelib.parser.SwerveDriveConfiguration
-import swervelib.parser.SwerveModulePhysicalCharacteristics
 import swervelib.telemetry.SwerveDriveTelemetry
 
 object SwerveConstants {
@@ -18,7 +17,7 @@ object SwerveConstants {
     val IMU: SwerveIMU = NavXSwerve(DeviceConstants.IMUPort)
     val IMU_INVERTED: Boolean = true
 
-    val COSINE_COMPENSATOR: Boolean = true
+    val COSINE_COMPENSATOR: Boolean = false
 
     val YAGSL: SwerveDriveConfiguration =
         SwerveDriveConfiguration(
