@@ -1,11 +1,10 @@
 package org.frc5183.robot.constants.swerve.modules
 
+import com.pathplanner.lib.config.ModuleConfig
 import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Current
 import edu.wpi.first.units.measure.Distance
-import edu.wpi.first.units.measure.Mass
 import edu.wpi.first.units.measure.MomentOfInertia
 import edu.wpi.first.units.measure.Voltage
 import org.frc5183.robot.constants.PhysicalConstants
@@ -30,6 +29,8 @@ object SwerveModulePhysicalConstants {
     val ANGLE_GEAR_RATIO: Double = 18.75
     val WHEEL_DIAMETER: Distance = Units.Inches.of(4.0)
 
+    val MAX_DRIVE_VELOCITY = Units.MetersPerSecond.of(5.0) // TODO: https://pathplanner.dev/robot-config.html#module-config-options
+
     val CONVERSION_FACTORS: ConversionFactorsJson =
         ConversionFactorsJson().apply {
             val driveConversionFactors = DriveConversionFactorsJson()
@@ -45,17 +46,29 @@ object SwerveModulePhysicalConstants {
             this.angle = angleConversionFactors
         }
 
-    val YAGSL: SwerveModulePhysicalCharacteristics = SwerveModulePhysicalCharacteristics(
-        CONVERSION_FACTORS,
-        WHEEL_COF,
-        PhysicalConstants.OPTIMAL_VOLTAGE.`in`(Units.Volts),
-        DRIVE_CURRENT_LIMIT.`in`(Units.Amps).toInt(),
-        ANGLE_CURRENT_LIMIT.`in`(Units.Amps).toInt(),
-        DRIVE_MOTOR_RAMP_RATE,
-        ANGLE_MOTOR_RAMP_RATE,
-        DRIVE_MINIMUM_VOLTAGE.`in`(Units.Volts),
-        ANGLE_MINIMUM_VOLTAGE.`in`(Units.Volts),
-        STEER_ROTATIONAL_INERTIA.`in`(Units.KilogramSquareMeters),
-        PhysicalConstants.MASS.`in`(Units.Kilograms),
-    )
+    val YAGSL: SwerveModulePhysicalCharacteristics =
+        SwerveModulePhysicalCharacteristics(
+            CONVERSION_FACTORS,
+            WHEEL_COF,
+            PhysicalConstants.OPTIMAL_VOLTAGE.`in`(Units.Volts),
+            DRIVE_CURRENT_LIMIT.`in`(Units.Amps).toInt(),
+            ANGLE_CURRENT_LIMIT.`in`(Units.Amps).toInt(),
+            DRIVE_MOTOR_RAMP_RATE,
+            ANGLE_MOTOR_RAMP_RATE,
+            DRIVE_MINIMUM_VOLTAGE.`in`(Units.Volts),
+            ANGLE_MINIMUM_VOLTAGE.`in`(Units.Volts),
+            STEER_ROTATIONAL_INERTIA.`in`(Units.KilogramSquareMeters),
+            PhysicalConstants.MASS.`in`(Units.Kilograms),
+        )
+
+    val PATHPLANNER: ModuleConfig
+        get() =
+            ModuleConfig(
+                WHEEL_DIAMETER.div(2.0),
+                MAX_DRIVE_VELOCITY,
+                WHEEL_COF,
+                MOTOR_TYPE,
+                DRIVE_CURRENT_LIMIT,
+                1,
+            )
 }
