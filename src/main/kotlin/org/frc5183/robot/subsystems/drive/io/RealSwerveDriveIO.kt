@@ -4,9 +4,10 @@ import edu.wpi.first.math.Matrix
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
-import org.frc5183.robot.subsystems.vision.VisionSubsystem
+import edu.wpi.first.units.measure.Force
 import swervelib.SwerveDrive
 
 open class RealSwerveDriveIO(
@@ -16,16 +17,12 @@ open class RealSwerveDriveIO(
         drive.headingCorrection = false
     }
 
-    override val pose: Pose2d
-        get() = drive.pose
-
-    override val velocity: ChassisSpeeds
-        get() = drive.robotVelocity
-
-    override fun updateInputs(inputs: SwerveDriveIO.SwerveDriveIOInputs) {
-        inputs.pose = pose
-        inputs.velocity = velocity
+    override fun updateInputs(inputs: SwerveDriveIOInputs) {
+        inputs.pose = drive.pose
+        inputs.robotVelocity = drive.robotVelocity
+        inputs.fieldVelocity = drive.fieldVelocity
         inputs.moduleStates = drive.states
+        inputs.kinematics = drive.kinematics
     }
 
     override fun stopOdometryThread() = drive.stopOdometryThread()
@@ -42,6 +39,14 @@ open class RealSwerveDriveIO(
 
     override fun resetPose(pose: Pose2d) = drive.resetOdometry(pose)
 
+    override fun getTargetSpeeds(
+        x: Double,
+        y: Double,
+        headingX: Double,
+        headingY: Double,
+    ): ChassisSpeeds =
+        drive.swerveController.getTargetSpeeds(x, y, headingX, headingY, drive.pose.rotation.radians, TODO("requires constants"))
+
     override fun drive(
         translation: Translation2d,
         rotation: Double,
@@ -49,5 +54,13 @@ open class RealSwerveDriveIO(
         openLoop: Boolean,
     ) = drive.drive(translation, rotation, fieldOriented, openLoop)
 
-    override fun drive(speeds: ChassisSpeeds) = drive.drive(speeds)
+    override fun drive(
+        robotRelativeVelocity: ChassisSpeeds,
+        states: List<SwerveModuleState>,
+        feedforwardForces: List<Force>,
+    ) = drive.drive(robotRelativeVelocity, states.toTypedArray(), feedforwardForces.toTypedArray())
+
+    override fun driveFieldOriented(speeds: ChassisSpeeds) = drive.driveFieldOriented(speeds)
+
+    override fun driveRobotOriented(speeds: ChassisSpeeds) = drive.drive(speeds)
 }

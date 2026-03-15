@@ -7,31 +7,15 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
-import org.frc5183.robot.logging.AutoLogInputs
+import edu.wpi.first.units.measure.Force
 
 interface SwerveDriveIO {
-    class SwerveDriveIOInputs : AutoLogInputs() {
-        var pose by log(Pose2d())
-        var velocity by log(ChassisSpeeds())
-        var moduleStates by log(emptyArray<SwerveModuleState>())
-    }
-
     /**
      * Updates the IO inputs with current values to be logged.
      *
      * @param inputs The input object to be updated.
      */
     fun updateInputs(inputs: SwerveDriveIOInputs)
-
-    /**
-     * The current pose of the robot according to odometry/vision estimates.
-     */
-    val pose: Pose2d
-
-    /**
-     * The current robot-relative speed/velocity of the robot according to odometry.
-     */
-    val velocity: ChassisSpeeds
 
     /**
      * Stops YAGSL's odometry thread.
@@ -70,6 +54,16 @@ interface SwerveDriveIO {
     fun resetPose(pose: Pose2d = Pose2d.kZero)
 
     /**
+     * Get the chassis speeds based on controller input of 2 joysticks
+     */
+    fun getTargetSpeeds(
+        x: Double,
+        y: Double,
+        headingX: Double,
+        headingY: Double,
+    ): ChassisSpeeds
+
+    /**
      * Drives the robot with the given translation and rotation.
      * @param translation The translation to drive with.
      * @param rotation The rotation to drive with.
@@ -84,8 +78,26 @@ interface SwerveDriveIO {
     )
 
     /**
-     * Drives the robot with the given chassis speeds.
-     * @param speeds The chassis speeds to drive with.
+     * Drive the robot using [SwerveModuleState]s.
+     * @param robotRelativeVelocity The robot relative velocity to drive with.
+     * @param states The swerve module states to drive with.
+     * @param feedforwardForces The feedforward forces to apply to each module.
      */
-    fun drive(speeds: ChassisSpeeds)
+    fun drive(
+        robotRelativeVelocity: ChassisSpeeds,
+        states: List<SwerveModuleState>,
+        feedforwardForces: List<Force>,
+    )
+
+    /**
+     * Drive the robot given a chassis field oriented velocity.
+     * @param speeds Field oriented chassis speeds to drive with.
+     */
+    fun driveFieldOriented(speeds: ChassisSpeeds)
+
+    /**
+     * Drive the robot given a chassis robot oriented velocity.
+     * @param speeds Robot oriented chassis speeds to drive with.
+     */
+    fun driveRobotOriented(speeds: ChassisSpeeds)
 }
