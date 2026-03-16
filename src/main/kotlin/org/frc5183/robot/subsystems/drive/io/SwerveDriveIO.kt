@@ -85,8 +85,8 @@ interface SwerveDriveIO {
      */
     fun drive(
         robotRelativeVelocity: ChassisSpeeds,
-        states: List<SwerveModuleState>,
-        feedforwardForces: List<Force>,
+        states: Array<out SwerveModuleState>,
+        feedforwardForces: Array<out Force>,
     )
 
     /**

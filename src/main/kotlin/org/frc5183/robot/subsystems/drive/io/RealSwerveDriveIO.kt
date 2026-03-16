@@ -56,9 +56,9 @@ open class RealSwerveDriveIO(
 
     override fun drive(
         robotRelativeVelocity: ChassisSpeeds,
-        states: List<SwerveModuleState>,
-        feedforwardForces: List<Force>,
-    ) = drive.drive(robotRelativeVelocity, states.toTypedArray(), feedforwardForces.toTypedArray())
+        states: Array<out SwerveModuleState>,
+        feedforwardForces: Array<out Force>,
+    ) = drive.drive(robotRelativeVelocity, states, feedforwardForces)
 
     override fun driveFieldOriented(speeds: ChassisSpeeds) = drive.driveFieldOriented(speeds)
 

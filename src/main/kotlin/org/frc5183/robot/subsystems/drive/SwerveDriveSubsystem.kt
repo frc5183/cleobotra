@@ -37,8 +37,8 @@ class SwerveDriveSubsystem(
     val fieldVelocity: ChassisSpeeds
         get() = ioInputs.fieldVelocity
 
-    val moduleStates: List<SwerveModuleState>
-        get() = ioInputs.moduleStates.toList()
+    val moduleStates: Array<out SwerveModuleState>
+        get() = ioInputs.moduleStates
 
     val kinematics: SwerveDriveKinematics
         get() = ioInputs.kinematics
@@ -104,8 +104,8 @@ class SwerveDriveSubsystem(
 
     fun drive(
         robotRelativeVelocity: ChassisSpeeds,
-        states: List<SwerveModuleState>,
-        feedforwardForces: List<Force>,
+        states: Array<out SwerveModuleState>,
+        feedforwardForces: Array<out Force>,
     ) = io.drive(robotRelativeVelocity, states, feedforwardForces)
 
     fun driveFieldOriented(speeds: ChassisSpeeds) = io.driveFieldOriented(speeds)
