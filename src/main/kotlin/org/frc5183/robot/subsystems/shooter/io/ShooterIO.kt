@@ -1,11 +1,17 @@
 package org.frc5183.robot.subsystems.shooter.io
 
-import org.frc5183.robot.logging.AutoLogInputs
-
 interface ShooterIO {
     fun updateInputs(inputs: ShooterIOInputs)
 
-    fun run(speed: Double)
+    fun runShooter(speed: Double)
 
-    fun stop()
+    fun runIntake(speed: Double)
+
+    fun runFeeder(speed: Double)
+
+    fun stopShooter()
+
+    fun stopIntake()
+
+    fun stopFeeder()
 }

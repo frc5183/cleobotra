@@ -2,19 +2,25 @@ package org.frc5183.robot.subsystems.drive.io
 
 import edu.wpi.first.math.Matrix
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.units.measure.Force
+import edu.wpi.first.units.Units
+import org.frc5183.robot.constants.PhysicalConstants
+import org.frc5183.robot.constants.swerve.SwerveConstants
 import swervelib.SwerveDrive
+import swervelib.math.SwerveMath
 
 open class RealSwerveDriveIO(
     private val drive: SwerveDrive,
 ) : SwerveDriveIO {
     init {
         drive.headingCorrection = false
+        drive.setCosineCompensator(SwerveConstants.COSINE_COMPENSATOR)
     }
 
     override fun updateInputs(inputs: SwerveDriveIOInputs) {

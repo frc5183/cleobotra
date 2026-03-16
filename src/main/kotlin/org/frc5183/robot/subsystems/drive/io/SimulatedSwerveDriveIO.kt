@@ -6,7 +6,7 @@ class SimulatedSwerveDriveIO(
     drive: SwerveDrive,
 ) : RealSwerveDriveIO(drive) {
     init {
-        drive.headingCorrection = true
-        drive.setCosineCompensator(true)
+        drive.headingCorrection = false
+        drive.setCosineCompensator(false)
     }
 }
