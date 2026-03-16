@@ -1,19 +1,26 @@
 package org.frc5183.robot.subsystems.drive
 
+import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.commands.PathfindingCommand
+import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.pathfinding.Pathfinding
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import org.frc5183.robot.constants.AutoConstants
 import org.frc5183.robot.constants.swerve.SwerveConstants
+import org.frc5183.robot.constants.swerve.SwervePIDConstants
+import org.frc5183.robot.constants.swerve.toPathPlannerPIDConstants
 import org.frc5183.robot.math.pathfinding.LocalADStarAK
 import org.frc5183.robot.subsystems.drive.io.SwerveDriveIO
 import org.frc5183.robot.subsystems.vision.VisionSubsystem
 import org.littletonrobotics.junction.Logger
 import swervelib.telemetry.SwerveDriveTelemetry
+import kotlin.jvm.optionals.getOrNull
 
 class SwerveDriveSubsystem(
     private val io: SwerveDriveIO,
@@ -30,27 +37,19 @@ class SwerveDriveSubsystem(
     init {
         SwerveDriveTelemetry.verbosity = SwerveConstants.VERBOSITY
 
-//        AutoBuilder.configure(
-//            { robotPose },
-//            this::resetPose,
-//            { robotVelocity },
-//            PPHolonomicDriveController(
-//                PIDConstants(
-//                    TODO("requires constants"),
-//                    TODO("requires constants"),
-//                    TODO("requires constants"),
-//                ),
-//                PIDConstants(
-//                    TODO("requires constants"),
-//                    TODO("requires constants"),
-//                    TODO("requires constants"),
-//                ),
-//            ),
-//            TODO("requires constants"),
-//            { DriverStation.getAlliance().getOrNull() == DriverStation.Alliance.Red },
-//            this,
-//            TODO("requires constants"),
-//        )
+        AutoBuilder.configure(
+            { robotPose },
+            this::resetPose,
+            { robotVelocity },
+            { robotRelativeSpeeds: ChassisSpeeds -> drive(robotRelativeSpeeds) },
+            PPHolonomicDriveController(
+                SwervePIDConstants.DRIVE_PID.toPathPlannerPIDConstants(),
+                SwervePIDConstants.ANGLE_PID.toPathPlannerPIDConstants(),
+            ),
+            AutoConstants.PATHPLANNER_CONFIG,
+            { DriverStation.getAlliance().getOrNull() == DriverStation.Alliance.Red },
+            this,
+        )
 
         Pathfinding.setPathfinder(LocalADStarAK())
 
