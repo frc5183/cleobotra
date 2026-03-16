@@ -2,6 +2,7 @@ package org.frc5183.robot.subsystems.drive.io
 
 import edu.wpi.first.math.Matrix
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveModuleState
@@ -68,6 +69,11 @@ interface SwerveDriveIO {
      * Resets the robot's pose to [pose].
      */
     fun resetPose(pose: Pose2d = Pose2d.kZero)
+
+    /**
+     * Returns a [ChassisSpeeds] object based off x and y inputs from -1 to 1.
+     */
+    fun getTargetSpeeds(x: Double, y: Double, angle: Rotation2d): ChassisSpeeds
 
     /**
      * Drives the robot with the given translation and rotation.

@@ -1,12 +1,8 @@
 package org.frc5183.robot.constants
 
-import com.revrobotics.ColorSensorV3.Register
-import edu.wpi.first.wpilibj.XboxController
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import org.frc5183.robot.commands.drive.TeleopDriveCommand
-import org.frc5183.robot.math.curve.Curve
 import org.frc5183.robot.subsystems.drive.SwerveDriveSubsystem
 import kotlin.math.absoluteValue
 
@@ -20,11 +16,9 @@ object Controls {
 
         TELEOP_DRIVE_COMMAND = TeleopDriveCommand(
             drive,
-            xInput = { DRIVER_CONTROLLER.leftX },
-            yInput = { DRIVER_CONTROLLER.leftY },
+            xInput = { if (DRIVER_CONTROLLER.leftX.absoluteValue < .2) 0.0 else DRIVER_CONTROLLER.leftX },
+            yInput = { if (DRIVER_CONTROLLER.leftY.absoluteValue < .2) 0.0 else DRIVER_CONTROLLER.leftY },
             rotationInput = { 0.0 },
-            translationCurve = Curve { if (it.absoluteValue > 0.2) it else 0.0 },
-            rotationCurve = Curve { 0.0 },
             fieldRelative = false
         )
 

@@ -16,7 +16,7 @@ import swervelib.parser.json.modules.DriveConversionFactorsJson
 object SwerveModulePhysicalConstants {
     val MOTOR_TYPE: DCMotor = DCMotor.getKrakenX60(1)
 
-    val WHEEL_COF: Double = 1.19
+    val WHEEL_COF: Double = 1.0
     val DRIVE_CURRENT_LIMIT: Current = Units.Amps.of(40.0)
     val ANGLE_CURRENT_LIMIT: Current = Units.Amps.of(30.0)
     val DRIVE_MOTOR_RAMP_RATE: Double = 0.25 // TODO
