@@ -6,7 +6,7 @@ import edu.wpi.first.units.measure.*
 object PhysicalConstants {
     val MASS: Mass = Units.Pounds.of(80.0) // TODO
     val MOI: MomentOfInertia = Units.KilogramSquareMeters.of(6.883) // TODO
-    
+
     val OPTIMAL_VOLTAGE: Voltage = Units.Volts.of(12.0)
 
     val MAX_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(4.0) // TODO

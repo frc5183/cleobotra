@@ -11,16 +11,18 @@ object Controls {
     val OPERATOR_CONTROLLER: CommandXboxController = CommandXboxController(1)
 
     lateinit var TELEOP_DRIVE_COMMAND: TeleopDriveCommand
+
     fun registerControls(drive: SwerveDriveSubsystem) {
         CommandScheduler.getInstance().activeButtonLoop.clear()
 
-        TELEOP_DRIVE_COMMAND = TeleopDriveCommand(
-            drive,
-            xInput = { if (DRIVER_CONTROLLER.leftX.absoluteValue < .2) 0.0 else DRIVER_CONTROLLER.leftX },
-            yInput = { if (DRIVER_CONTROLLER.leftY.absoluteValue < .2) 0.0 else DRIVER_CONTROLLER.leftY },
-            rotationInput = { 0.0 },
-            fieldRelative = false
-        )
+        TELEOP_DRIVE_COMMAND =
+            TeleopDriveCommand(
+                drive,
+                xInput = { if (DRIVER_CONTROLLER.leftX.absoluteValue < .2) 0.0 else DRIVER_CONTROLLER.leftX },
+                yInput = { if (DRIVER_CONTROLLER.leftY.absoluteValue < .2) 0.0 else DRIVER_CONTROLLER.leftY },
+                rotationInput = { 0.0 },
+                fieldRelative = false,
+            )
 
         drive.defaultCommand = TELEOP_DRIVE_COMMAND
     }

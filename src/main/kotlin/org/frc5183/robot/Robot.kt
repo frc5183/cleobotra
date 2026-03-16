@@ -21,6 +21,7 @@ import swervelib.SwerveDrive
 
 object Robot : LoggedRobot() {
     private val drive: SwerveDriveSubsystem
+
     init {
         HAL.report(
             FRCNetComm.tResourceType.kResourceType_Language,
@@ -46,18 +47,20 @@ object Robot : LoggedRobot() {
 
         Logger.start()
 
-        val swerve = SwerveDrive(
-            SwerveConstants.YAGSL,
-            SwerveConstants.YAGSL_CONTROLLER_CONFIG,
-            PhysicalConstants.MAX_VELOCITY.`in`(Units.MetersPerSecond),
-            Pose2d.kZero
-        )
+        val swerve =
+            SwerveDrive(
+                SwerveConstants.YAGSL,
+                SwerveConstants.YAGSL_CONTROLLER_CONFIG,
+                PhysicalConstants.MAX_VELOCITY.`in`(Units.MetersPerSecond),
+                Pose2d.kZero,
+            )
 
-        drive = if (RobotBase.isReal()) {
-            SwerveDriveSubsystem(RealSwerveDriveIO(swerve))
-        } else {
-            SwerveDriveSubsystem(SimulatedSwerveDriveIO(swerve))
-        }
+        drive =
+            if (RobotBase.isReal()) {
+                SwerveDriveSubsystem(RealSwerveDriveIO(swerve))
+            } else {
+                SwerveDriveSubsystem(SimulatedSwerveDriveIO(swerve))
+            }
     }
 
     override fun robotPeriodic() {

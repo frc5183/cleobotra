@@ -36,6 +36,6 @@ object SwerveConstants {
         SwerveControllerConfiguration(
             YAGSL,
             HEADING_PID,
-            PhysicalConstants.MAX_VELOCITY.`in`(Units.MetersPerSecond)
+            PhysicalConstants.MAX_VELOCITY.`in`(Units.MetersPerSecond),
         )
 }
