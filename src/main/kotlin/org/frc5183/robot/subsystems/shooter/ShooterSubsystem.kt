@@ -1,25 +1,18 @@
 package org.frc5183.robot.subsystems.shooter
 
+import com.revrobotics.spark.SparkMax
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import org.frc5183.robot.subsystems.shooter.io.ShooterIO
-import org.frc5183.robot.subsystems.shooter.io.ShooterIOInputs
+import org.littletonrobotics.junction.Logger
 
 class ShooterSubsystem(
-    private val io: ShooterIO,
+    val shooter: SparkMax,
+    val intake: SparkMax,
+    val feeder: SparkMax,
 ) : SubsystemBase() {
-    private val ioInputs = ShooterIOInputs()
-
-    val shooterSpeed: Double
-        get() = ioInputs.shooterSpeed
-
-    val intakeSpeed: Double
-        get() = ioInputs.intakeSpeed
-
-    val feederSpeed: Double
-        get() = ioInputs.feederSpeed
-
     override fun periodic() {
-        io.updateInputs(ioInputs)
+        Logger.recordOutput("Shooter/ShooterSpeed", shooter.get())
+        Logger.recordOutput("Shooter/IntakeSpeed", intake.get())
+        Logger.recordOutput("Shooter/FeederSpeed", feeder.get())
     }
 
     fun run(speed: Double) {
@@ -28,11 +21,11 @@ class ShooterSubsystem(
         runFeeder(speed)
     }
 
-    fun runShooter(speed: Double) = io.runShooter(speed)
+    fun runShooter(speed: Double) = shooter.set(speed)
 
-    fun runIntake(speed: Double) = io.runIntake(speed)
+    fun runIntake(speed: Double) = intake.set(speed)
 
-    fun runFeeder(speed: Double) = io.runFeeder(speed)
+    fun runFeeder(speed: Double) = feeder.set(speed)
 
     fun stop() {
         stopShooter()
@@ -40,9 +33,9 @@ class ShooterSubsystem(
         stopFeeder()
     }
 
-    fun stopShooter() = io.stopShooter()
+    fun stopShooter() = shooter.stopMotor()
 
-    fun stopIntake() = io.stopIntake()
+    fun stopIntake() = intake.stopMotor()
 
-    fun stopFeeder() = io.stopFeeder()
+    fun stopFeeder() = feeder.stopMotor()
 }
