@@ -155,11 +155,6 @@ tasks {
 
         from({ sourceSets.main.get().allSource })
     }
-
-    register<JavaExec>("replayWatch", JavaExec::class.java) {
-        mainClass = "org.littletonrobotics.junction.ReplayWatch"
-        classpath = sourceSets.main.get().runtimeClasspath
-    }
 }
 
 gversion {

@@ -1,27 +1,32 @@
 package org.frc5183.robot.subsystems.turntable
 
+import com.revrobotics.spark.SparkMax
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import org.frc5183.robot.subsystems.turntable.io.TurntableIO
-import org.frc5183.robot.subsystems.turntable.io.TurntableIOInputs
+import org.littletonrobotics.junction.Logger
+import org.photonvision.PhotonCamera
 import org.photonvision.targeting.PhotonTrackedTarget
 
 class TurntableSubsystem(
-    val io: TurntableIO,
+    val motor: SparkMax,
+    val camera: PhotonCamera,
 ) : SubsystemBase() {
-    val ioInputs = TurntableIOInputs()
-
     val targets: Array<PhotonTrackedTarget>
-        get() = ioInputs.targets
+        get() =
+            camera.allUnreadResults
+                .map { it.targets }
+                .flatten()
+                .toTypedArray()
 
     override fun periodic() {
-        io.updateInputs(ioInputs)
+        Logger.recordOutput("Turntable/Speed", motor.get())
+        Logger.recordOutput("Turntable/Targets", targets.map { it.fiducialId }.toIntArray())
     }
 
     fun setSpeed(speed: Double) {
-        io.setSpeed(speed)
+        motor.set(speed)
     }
 
     fun stop() {
-        io.stop()
+        motor.stopMotor()
     }
 }
