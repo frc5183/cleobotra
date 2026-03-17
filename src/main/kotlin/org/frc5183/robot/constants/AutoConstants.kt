@@ -10,8 +10,8 @@ object AutoConstants {
             PhysicalConstants.MOI,
             SwerveModulePhysicalConstants.PATHPLANNER,
             FLSwerveModuleConstants.LOCATION,
-            FRSwerveModuleConstant.LOCATION,
-            BLSwerveModuleConstant.LOCATION,
-            BRSwerveModuleConstant.LOCATION,
+            FRSwerveModuleConstants.LOCATION,
+            BLSwerveModuleConstants.LOCATION,
+            BRSwerveModuleConstants.LOCATION,
         )
 }

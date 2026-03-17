@@ -8,9 +8,9 @@ import swervelib.encoders.SwerveAbsoluteEncoder
 import swervelib.motors.SwerveMotor
 import swervelib.motors.TalonFXSwerve
 
-object BRSwerveModuleConstant : SwerveModuleConstants {
+object BRSwerveModuleConstants : SwerveModuleConstants {
     override val NAME: String = "backright"
-    override val LOCATION: Translation2d = Translation2d(Units.Inches.of(-9.3125), Units.Inches.of(-12.75))
+    override val LOCATION: Translation2d = Translation2d(Units.Inches.of(-9.5), Units.Inches.of(-12.75))
 
     override val DRIVE_MOTOR: SwerveMotor = TalonFXSwerve(41, true, SwerveModulePhysicalConstants.MOTOR_TYPE)
     override val DRIVE_MOTOR_INVERTED: Boolean = false
