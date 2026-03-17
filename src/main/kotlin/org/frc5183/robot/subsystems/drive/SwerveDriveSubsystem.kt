@@ -16,6 +16,7 @@ import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Force
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.frc5183.robot.constants.AutoConstants
@@ -28,6 +29,7 @@ import org.frc5183.robot.subsystems.vision.VisionSubsystem
 import swervelib.SwerveDrive
 import swervelib.math.SwerveMath
 import swervelib.telemetry.SwerveDriveTelemetry
+import java.util.function.Supplier
 import kotlin.jvm.optionals.getOrNull
 
 class SwerveDriveSubsystem(
@@ -51,6 +53,11 @@ class SwerveDriveSubsystem(
 
     init {
         SwerveDriveTelemetry.verbosity = SwerveConstants.VERBOSITY
+
+        drive.headingCorrection = false
+        drive.setCosineCompensator(false)
+        drive.setAngularVelocityCompensation(true, false, 0.1)
+        drive.setModuleEncoderAutoSynchronize(true, 1.0)
 
         AutoBuilder.configure(
             { robotPose },
@@ -138,5 +145,9 @@ class SwerveDriveSubsystem(
 
     fun driveFieldOriented(speeds: ChassisSpeeds) = drive.driveFieldOriented(speeds)
 
+    fun driveFieldOriented(speedsSupplier: Supplier<ChassisSpeeds>): Command = run { driveFieldOriented(speedsSupplier.get()) }
+
     fun driveRobotOriented(speeds: ChassisSpeeds) = drive.drive(speeds)
+
+    fun driveRobotOriented(speedsSupplier: Supplier<ChassisSpeeds>): Command = run { driveRobotOriented(speedsSupplier.get()) }
 }

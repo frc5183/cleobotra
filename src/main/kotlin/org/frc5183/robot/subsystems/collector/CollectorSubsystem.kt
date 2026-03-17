@@ -2,6 +2,7 @@ package org.frc5183.robot.subsystems.collector
 
 import com.revrobotics.spark.SparkMax
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.frc5183.robot.constants.Constants
 import org.littletonrobotics.junction.Logger
@@ -15,21 +16,26 @@ class CollectorSubsystem(
     val armSpeed: Double
         get() = arm.get()
 
+    val armPosition: Angle
+        get() = Units.Rotations.of(arm.absoluteEncoder.position)
+
     val intakeSpeed: Double
         get() = intake.get()
 
     val atBottom: Boolean
         get() =
-            abs(Constants.COLLECTOR_ARM_BOTTOM.`in`(Units.Rotations) - arm.absoluteEncoder.position) <=
-                Constants.COLLECTOR_ARM_DELTA.`in`(Units.Rotations)
+            abs(Constants.COLLECTOR_ARM_BOTTOM.`in`(Units.Degrees) - armPosition.`in`(Units.Degrees)) <=
+                Constants.COLLECTOR_ARM_DELTA.`in`(Units.Degrees)
 
     val atTop: Boolean
         get() =
-            abs(Constants.COLLECTOR_ARM_TOP.`in`(Units.Rotations) - arm.absoluteEncoder.position) <=
-                Constants.COLLECTOR_ARM_DELTA.`in`(Units.Rotations)
+            abs(Constants.COLLECTOR_ARM_TOP.`in`(Units.Rotations) - armPosition.`in`(Units.Degrees)) <=
+                Constants.COLLECTOR_ARM_DELTA.`in`(Units.Degrees)
 
     override fun periodic() {
         Logger.recordOutput("Collector/ArmSpeed", arm.get())
+        Logger.recordOutput("Collector/ArmPosition", armPosition)
+
         Logger.recordOutput("Collector/IntakeSpeed", intake.get())
 
         Logger.recordOutput("Collector/Bottom", atBottom)
