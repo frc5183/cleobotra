@@ -15,9 +15,9 @@ import org.frc5183.robot.target.TurntableTarget
  */
 class ConstantAlignTurntable(
     private val turntable: TurntableSubsystem,
-    private val kP: Double,
-    private val kI: Double,
-    private val kD: Double
+    private val kP: Double = AutoConstants.SHOOTER_ALIGN_KP,
+    private val kI: Double = AutoConstants.SHOOTER_ALIGN_KI,
+    private val kD: Double = AutoConstants.SHOOTER_ALIGN_KD
 ) : Command() {
     init {
         addRequirements(turntable)
