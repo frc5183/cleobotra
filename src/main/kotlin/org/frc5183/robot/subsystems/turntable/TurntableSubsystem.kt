@@ -14,6 +14,8 @@ class TurntableSubsystem(
     val camera: PhotonCamera,
     val limitSwitch: DigitalInput,
 ) : SubsystemBase() {
+    var safetyOverride: Boolean = false
+
     val speed: Double
         get() = motor.get()
 
@@ -37,7 +39,7 @@ class TurntableSubsystem(
         Logger.recordOutput("Turntable/Left Limit", leftLimitReached)
         Logger.recordOutput("Turntable/Right Limit", rightLimitReached)
 
-        if (limitSwitch.get()) {
+        if (!safetyOverride && limitSwitch.get()) {
             if (speedGoesLeft(speed) && !rightLimitReached) {
                 leftLimitReached = true
                 stop()
@@ -56,7 +58,7 @@ class TurntableSubsystem(
     }
 
     private fun updateUnreadResults() {
-        var mostRecentTimestamp = camera.allUnreadResults.firstOrNull()?.timestampSeconds ?: 0.0
+        var mostRecentTimestamp = resultsList.firstOrNull()?.timestampSeconds ?: 0.0
 
         for (result in resultsList) {
             mostRecentTimestamp = max(mostRecentTimestamp, result.timestampSeconds)
@@ -69,8 +71,8 @@ class TurntableSubsystem(
     }
 
     fun setSpeed(speed: Double) {
-        if (leftLimitReached && speedGoesLeft(speed)) return
-        if (rightLimitReached && speedGoesRight(speed)) return
+        if (!safetyOverride && leftLimitReached && speedGoesLeft(speed)) return
+        if (!safetyOverride && rightLimitReached && speedGoesRight(speed)) return
 
         motor.set(speed)
     }

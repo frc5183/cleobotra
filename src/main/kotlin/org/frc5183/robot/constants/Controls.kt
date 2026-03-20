@@ -49,6 +49,7 @@ object Controls {
         OPERATOR_CONTROLLER.a().toggleOnTrue(ShootCommand(shooter))
         OPERATOR_CONTROLLER.x().toggleOnTrue(ReverseShooter(shooter))
 
+//        OPERATOR_CONTROLLER.povUp().toggleOnTrue(ConstantAlignTurntable(turntable, AutoConstants.SHOOTER_ALIGN_KP, AutoConstants.SHOOTER_ALIGN_KI, AutoConstants.SHOOTER_ALIGN_KD))
         OPERATOR_CONTROLLER.povUp().toggleOnTrue(Shoot75Command(shooter))
         OPERATOR_CONTROLLER.povRight().toggleOnTrue(Shoot85Command(shooter))
         OPERATOR_CONTROLLER.povDown().toggleOnTrue(Shoot90Command(shooter))
@@ -58,7 +59,6 @@ object Controls {
         OPERATOR_CONTROLLER.leftBumper().onTrue(RaiseCollector(collector))
         OPERATOR_CONTROLLER.y().toggleOnTrue(IntakeCommand(collector))
         OPERATOR_CONTROLLER.leftStick().toggleOnTrue(DriveCollector(collector) { OPERATOR_CONTROLLER.leftY })
-
         OPERATOR_CONTROLLER.rightStick().toggleOnTrue(DriveTurntable(turntable) { OPERATOR_CONTROLLER.rightX })
 
         OPERATOR_CONTROLLER.leftTrigger().whileTrue(LowerClimber(climber))

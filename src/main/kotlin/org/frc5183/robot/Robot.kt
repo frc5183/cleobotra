@@ -127,8 +127,17 @@ object Robot : LoggedRobot() {
         Controls.registerControls(drive, shooter, collector, turntable, climber)
     }
 
+    override fun teleopPeriodic() {
+//        SmartDashboard.putBoolean("Turntable/Safety Override", turntable.safetyOverride)
+//        turntable.safetyOverride = SmartDashboard.getBoolean("Turntable/Safety Override", false)
+    }
+
     override fun autonomousInit() {
         CommandScheduler.getInstance().cancelAll()
         CommandScheduler.getInstance().schedule(autoChooser.selected)
+    }
+
+    override fun printWatchdogEpochs() {
+        return
     }
 }
