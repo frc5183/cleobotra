@@ -1,8 +1,10 @@
 package org.frc5183.robot.commands.turntable
 
+import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
+import org.frc5183.robot.constants.AutoConstants
 import org.frc5183.robot.subsystems.turntable.TurntableSubsystem
-import org.frc5183.robot.target.FieldTarget
+import org.frc5183.robot.target.TurntableTarget
 
 /**
  * A command that will align the turntable to be centered on the middle hub targets and then stop.
@@ -26,30 +28,31 @@ class AlignTurntable(
     override fun execute() {
         val targets =
             turntable.targets.filter {
-                it.fiducialId == FieldTarget.HUB_MIDDLE_LEFT.id ||
-                    it.fiducialId == FieldTarget.HUB_MIDDLE_RIGHT.id
+                TurntableTarget.hubIds.contains(it.fiducialId)
             }
 
         // We can't see any targets, just spin until we can.
         if (targets.isEmpty()) {
-            turntable.setSpeed(1.0)
+            oscillate()
+            return
         }
 
-        // Get our left and right targets
-        val left = targets.firstOrNull { it.fiducialId == FieldTarget.HUB_MIDDLE_LEFT.id }
-        val right = targets.firstOrNull { it.fiducialId == FieldTarget.HUB_MIDDLE_RIGHT.id }
+        val target = targets.minBy { TurntableTarget.byId(it.fiducialId).weight }
 
-        if (left == null) { // If we can't see the left target, move to the left.
-            turntable.setSpeed(-1.0)
-        } else if (right == null) { // If we can't see the right target, move to the right.
-            turntable.setSpeed(1.0)
-        } else { // If we can see both targets, we're centered enough.
+        val yaw = target.yaw
+
+        if (Math.abs(yaw) < AutoConstants.SHOOTER_ALIGN_DEADBAND.`in`(Units.Degrees)) {
             turntable.stop()
             aligned = true
+        } else {
+            val turnPower = yaw * AutoConstants.SHOOTER_ALIGN_KP
+            turntable.setSpeed(turnPower)
         }
+    }
 
-        // TODO: Add additional checks to center based off (target).detectedCorners and their positioning on the camera
-        //   this will allow for more precision while far.
+    private fun oscillate() {
+        if (turntable.leftLimitReached) turntable.setSpeed(-1.0)
+        if (turntable.rightLimitReached) turntable.setSpeed(1.0)
     }
 
     override fun end(interrupted: Boolean) {

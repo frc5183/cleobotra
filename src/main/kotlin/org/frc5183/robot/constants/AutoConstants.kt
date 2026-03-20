@@ -1,6 +1,7 @@
 package org.frc5183.robot.constants
 
 import com.pathplanner.lib.config.RobotConfig
+import edu.wpi.first.units.Units
 import org.frc5183.robot.constants.swerve.modules.*
 
 object AutoConstants {
@@ -14,4 +15,9 @@ object AutoConstants {
             BLSwerveModuleConstants.LOCATION,
             BRSwerveModuleConstants.LOCATION,
         )
+
+    val USE_FEED_FORWARD: Boolean = false
+
+    val SHOOTER_ALIGN_KP = 0.02
+    val SHOOTER_ALIGN_DEADBAND = Units.Degrees.of(25.0)
 }

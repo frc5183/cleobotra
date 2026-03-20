@@ -64,11 +64,13 @@ class SwerveDriveSubsystem(
             this::resetPose,
             { robotVelocity },
             { robotRelativeSpeeds: ChassisSpeeds, feedforwards: DriveFeedforwards ->
-                drive(
-                    robotRelativeSpeeds,
-                    kinematics.toSwerveModuleStates(robotRelativeSpeeds),
-                    feedforwards.linearForces(),
-                )
+                if (AutoConstants.USE_FEED_FORWARD) {
+                    drive(
+                        robotRelativeSpeeds,
+                        kinematics.toSwerveModuleStates(robotRelativeSpeeds),
+                        feedforwards.linearForces(),
+                    )
+                } else driveRobotOriented(robotRelativeSpeeds)
             },
             PPHolonomicDriveController(
                 SwervePIDConstants.DRIVE_PID.toPathPlannerPIDConstants(),

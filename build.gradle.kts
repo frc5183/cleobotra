@@ -56,7 +56,7 @@ deploy {
             }
 
             register<FileTreeArtifact>("frcStaticFileDeploy") {
-                files = project.fileTree("src/main/deploy")
+                files = project.fileTree("deploy")
                 directory = "/home/lvuser/deploy"
                 // Change to true to delete files on roboRIO that no longer exist in deploy directory of this project
                 deleteOldFiles = true

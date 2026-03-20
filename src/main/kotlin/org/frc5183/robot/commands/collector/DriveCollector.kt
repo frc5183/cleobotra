@@ -12,11 +12,11 @@ class DriveCollector(
     }
 
     override fun execute() {
-        collector.runIntake(input())
+        collector.runArm(input())
     }
 
     override fun end(interrupted: Boolean) {
-        collector.stopIntake()
+        collector.stopArm()
     }
 
     override fun isFinished(): Boolean = false

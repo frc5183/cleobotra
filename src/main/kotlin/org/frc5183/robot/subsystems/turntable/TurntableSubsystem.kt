@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 import org.photonvision.PhotonCamera
+import org.photonvision.targeting.PhotonPipelineResult
 import org.photonvision.targeting.PhotonTrackedTarget
+import kotlin.math.max
 
 class TurntableSubsystem(
     val motor: SparkMax,
@@ -15,12 +17,11 @@ class TurntableSubsystem(
     val speed: Double
         get() = motor.get()
 
-    val targets: Array<PhotonTrackedTarget>
-        get() =
-            camera.allUnreadResults
-                .map { it.targets }
-                .flatten()
-                .toTypedArray()
+    var resultsList: MutableList<PhotonPipelineResult> = mutableListOf()
+        private set
+
+    var targets: List<PhotonTrackedTarget> = emptyList()
+        private set
 
     var leftLimitReached: Boolean = false
         private set
@@ -33,21 +34,38 @@ class TurntableSubsystem(
         Logger.recordOutput("Turntable/Targets", targets.map { it.fiducialId }.toIntArray())
 
         Logger.recordOutput("Turntable/Hit Limit", limitSwitch.get())
+        Logger.recordOutput("Turntable/Left Limit", leftLimitReached)
+        Logger.recordOutput("Turntable/Right Limit", rightLimitReached)
 
-        if (speedGoesLeft(speed) && limitSwitch.get()) {
-            leftLimitReached = true
-            stop()
-        }
-
-        if (speedGoesRight(speed) && limitSwitch.get()) {
-            rightLimitReached = true
-            stop()
+        if (limitSwitch.get()) {
+            if (speedGoesLeft(speed) && !rightLimitReached) {
+                leftLimitReached = true
+                stop()
+            } else if (speedGoesRight(speed) && !leftLimitReached) {
+                rightLimitReached = true
+                stop()
+            }
         }
 
         if (!limitSwitch.get()) {
             leftLimitReached = false
             rightLimitReached = false
         }
+
+        updateUnreadResults()
+    }
+
+    private fun updateUnreadResults() {
+        var mostRecentTimestamp = camera.allUnreadResults.firstOrNull()?.timestampSeconds ?: 0.0
+
+        for (result in resultsList) {
+            mostRecentTimestamp = max(mostRecentTimestamp, result.timestampSeconds)
+        }
+
+        resultsList = camera.allUnreadResults
+        resultsList.sortByDescending { it.timestampSeconds }
+
+        targets = resultsList.map { it.targets }.flatten()
     }
 
     fun setSpeed(speed: Double) {
@@ -61,6 +79,6 @@ class TurntableSubsystem(
         motor.stopMotor()
     }
 
-    fun speedGoesLeft(speed: Double) = speed < 0
-    fun speedGoesRight(speed: Double) = speed > 0
+    fun speedGoesLeft(speed: Double) = speed > 0
+    fun speedGoesRight(speed: Double) = speed < 0
 }

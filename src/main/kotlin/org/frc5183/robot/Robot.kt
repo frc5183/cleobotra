@@ -1,21 +1,33 @@
 package org.frc5183.robot
 
+import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.hal.FRCNetComm
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.Threads
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.util.WPILibVersion
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import org.frc5183.robot.commands.collector.IntakeCommand
+import org.frc5183.robot.commands.collector.LowerCollector
+import org.frc5183.robot.commands.collector.RaiseCollector
+import org.frc5183.robot.commands.shooter.AlignAndShoot
 import org.frc5183.robot.constants.*
 import org.frc5183.robot.constants.swerve.SwerveConstants
+import org.frc5183.robot.subsystems.climber.ClimberSubsystem
 import org.frc5183.robot.subsystems.collector.CollectorSubsystem
 import org.frc5183.robot.subsystems.drive.SwerveDriveSubsystem
 import org.frc5183.robot.subsystems.shooter.ShooterSubsystem
 import org.frc5183.robot.subsystems.turntable.TurntableSubsystem
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.networktables.NT4Publisher
+import org.littletonrobotics.junction.wpilog.WPILOGWriter
 import swervelib.SwerveDrive
 
 object Robot : LoggedRobot() {
@@ -23,6 +35,9 @@ object Robot : LoggedRobot() {
     private val shooter: ShooterSubsystem
     private val collector: CollectorSubsystem
     private val turntable: TurntableSubsystem
+    private val climber: ClimberSubsystem
+
+    private val autoChooser: SendableChooser<Command>
 
     init {
         HAL.report(
@@ -47,6 +62,11 @@ object Robot : LoggedRobot() {
             else -> Logger.recordMetadata("GitDirty", "Unknown")
         }
 
+        if (isReal()) {
+            Logger.addDataReceiver(WPILOGWriter())
+            Logger.addDataReceiver(NT4Publisher())
+        }
+
         Logger.start()
 
         drive =
@@ -69,6 +89,8 @@ object Robot : LoggedRobot() {
         collector = CollectorSubsystem(
             DeviceConstants.COLLECTOR_ARM,
             DeviceConstants.COLLECTOR_INTAKE,
+            DeviceConstants.COLLECTOR_TOP_LIMIT_SWITCH,
+            DeviceConstants.COLLECTOR_BOTTOM_LIMIT_SWITCH
         )
 
         turntable = TurntableSubsystem(
@@ -76,6 +98,18 @@ object Robot : LoggedRobot() {
             DeviceConstants.TURNTABLE_CAMERA,
             DeviceConstants.TURNTABLE_LIMIT_SWITCH
         )
+
+        climber = ClimberSubsystem(
+            DeviceConstants.CLIMBER_MOTOR
+        )
+
+        autoChooser = AutoBuilder.buildAutoChooser()
+        SmartDashboard.putData("Auto Chooser", autoChooser)
+
+        NamedCommands.registerCommand("Lower Collector", LowerCollector(collector))
+        NamedCommands.registerCommand("Raise Collector", RaiseCollector(collector))
+        NamedCommands.registerCommand("Run Collector Intake", IntakeCommand(collector))
+        NamedCommands.registerCommand("Turret Shoot", AlignAndShoot(shooter, turntable))
     }
 
     override fun robotPeriodic() {
@@ -90,6 +124,11 @@ object Robot : LoggedRobot() {
 
     override fun teleopInit() {
         CommandScheduler.getInstance().cancelAll()
-        Controls.registerControls(drive, shooter, collector, turntable)
+        Controls.registerControls(drive, shooter, collector, turntable, climber)
+    }
+
+    override fun autonomousInit() {
+        CommandScheduler.getInstance().cancelAll()
+        CommandScheduler.getInstance().schedule(autoChooser.selected)
     }
 }

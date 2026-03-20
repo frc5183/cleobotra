@@ -4,13 +4,15 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import org.frc5183.robot.commands.climber.LowerClimber
+import org.frc5183.robot.commands.climber.RaiseClimber
 import org.frc5183.robot.commands.collector.DriveCollector
 import org.frc5183.robot.commands.collector.IntakeCommand
 import org.frc5183.robot.commands.collector.LowerCollector
 import org.frc5183.robot.commands.collector.RaiseCollector
-import org.frc5183.robot.commands.shooter.ReverseShooter
-import org.frc5183.robot.commands.shooter.ShootCommand
+import org.frc5183.robot.commands.shooter.*
 import org.frc5183.robot.commands.turntable.DriveTurntable
+import org.frc5183.robot.subsystems.climber.ClimberSubsystem
 import org.frc5183.robot.subsystems.collector.CollectorSubsystem
 import org.frc5183.robot.subsystems.drive.SwerveDriveSubsystem
 import org.frc5183.robot.subsystems.shooter.ShooterSubsystem
@@ -27,7 +29,8 @@ object Controls {
         drive: SwerveDriveSubsystem,
         shooter: ShooterSubsystem,
         collector: CollectorSubsystem,
-        turntable: TurntableSubsystem
+        turntable: TurntableSubsystem,
+        climber: ClimberSubsystem
     ) {
         CommandScheduler.getInstance().activeButtonLoop.clear()
 
@@ -38,13 +41,18 @@ object Controls {
         ).withControllerRotationAxis { DRIVER_CONTROLLER.rightX }
             .deadband(0.2)
             .scaleTranslation(0.8)
-            .allianceRelativeControl(true)
-            .robotRelative(false)
+            .robotRelative(true)
 
         drive.defaultCommand = drive.driveFieldOriented(driveInput)
 
+
         OPERATOR_CONTROLLER.a().toggleOnTrue(ShootCommand(shooter))
         OPERATOR_CONTROLLER.x().toggleOnTrue(ReverseShooter(shooter))
+
+        OPERATOR_CONTROLLER.povUp().toggleOnTrue(Shoot75Command(shooter))
+        OPERATOR_CONTROLLER.povRight().toggleOnTrue(Shoot85Command(shooter))
+        OPERATOR_CONTROLLER.povDown().toggleOnTrue(Shoot90Command(shooter))
+        OPERATOR_CONTROLLER.povLeft().toggleOnTrue(Shoot95Command(shooter))
 
         OPERATOR_CONTROLLER.rightBumper().onTrue(LowerCollector(collector))
         OPERATOR_CONTROLLER.leftBumper().onTrue(RaiseCollector(collector))
@@ -52,6 +60,9 @@ object Controls {
         OPERATOR_CONTROLLER.leftStick().toggleOnTrue(DriveCollector(collector) { OPERATOR_CONTROLLER.leftY })
 
         OPERATOR_CONTROLLER.rightStick().toggleOnTrue(DriveTurntable(turntable) { OPERATOR_CONTROLLER.rightX })
+
+        OPERATOR_CONTROLLER.leftBumper().whileTrue(LowerClimber(climber))
+        OPERATOR_CONTROLLER.rightBumper().whileTrue(RaiseClimber(climber))
 
         DRIVER_CONTROLLER.b().onTrue(InstantCommand({ CommandScheduler.getInstance().cancelAll() }))
         OPERATOR_CONTROLLER.b().onTrue(InstantCommand({ CommandScheduler.getInstance().cancelAll() }))

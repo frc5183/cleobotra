@@ -4,7 +4,6 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 
 object Constants {
-    val COLLECTOR_ARM_TOP: Angle = Units.Degrees.of(0.0)
-    val COLLECTOR_ARM_BOTTOM: Angle = Units.Degrees.of(180.0)
-    val COLLECTOR_ARM_DELTA: Angle = Units.Degrees.of(0.0)
+
+    val CLIMBER_MAX: Angle = Units.Rotations.of(9999.0)
 }

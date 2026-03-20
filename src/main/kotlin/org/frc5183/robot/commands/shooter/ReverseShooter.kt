@@ -9,7 +9,7 @@ class ReverseShooter(private val shooter: ShooterSubsystem) : Command() {
     }
 
     override fun initialize() {
-        shooter.run(1.0)
+        shooter.run(-1.0)
     }
 
     override fun end(interrupted: Boolean) {
