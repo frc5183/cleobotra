@@ -61,8 +61,8 @@ object Controls {
 
         OPERATOR_CONTROLLER.rightStick().toggleOnTrue(DriveTurntable(turntable) { OPERATOR_CONTROLLER.rightX })
 
-        OPERATOR_CONTROLLER.leftBumper().whileTrue(LowerClimber(climber))
-        OPERATOR_CONTROLLER.rightBumper().whileTrue(RaiseClimber(climber))
+        OPERATOR_CONTROLLER.leftTrigger().whileTrue(LowerClimber(climber))
+        OPERATOR_CONTROLLER.rightTrigger().whileTrue(RaiseClimber(climber))
 
         DRIVER_CONTROLLER.b().onTrue(InstantCommand({ CommandScheduler.getInstance().cancelAll() }))
         OPERATOR_CONTROLLER.b().onTrue(InstantCommand({ CommandScheduler.getInstance().cancelAll() }))
