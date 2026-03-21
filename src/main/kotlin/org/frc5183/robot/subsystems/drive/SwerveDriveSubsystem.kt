@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import org.frc5183.robot.constants.swerve.SwerveConstants
 import org.frc5183.robot.constants.AutoConstants
 import org.frc5183.robot.constants.PhysicalConstants
 import org.frc5183.robot.constants.swerve.SwervePIDConstants
@@ -26,6 +27,7 @@ import org.frc5183.robot.constants.swerve.toPathPlannerPIDConstants
 import org.frc5183.robot.math.pathfinding.LocalADStarAK
 import org.frc5183.robot.subsystems.vision.VisionSubsystem
 import swervelib.SwerveDrive
+import swervelib.telemetry.SwerveDriveTelemetry
 import swervelib.math.SwerveMath
 import java.util.function.Supplier
 import kotlin.jvm.optionals.getOrNull
@@ -50,7 +52,7 @@ class SwerveDriveSubsystem(
         get() = drive.kinematics
 
     init {
-//        SwerveDriveTelemetry.verbosity = SwerveConstants.VERBOSITY
+        SwerveDriveTelemetry.verbosity = SwerveConstants.VERBOSITY
 
         drive.headingCorrection = false
         drive.setCosineCompensator(false)

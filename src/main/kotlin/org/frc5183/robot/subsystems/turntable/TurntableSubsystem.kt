@@ -1,10 +1,15 @@
 package org.frc5183.robot.subsystems.turntable
 
 import com.revrobotics.spark.SparkMax
+import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import org.frc5183.robot.constants.DeviceConstants
+import org.frc5183.robot.target.TurntableTarget
 import org.littletonrobotics.junction.Logger
 import org.photonvision.PhotonCamera
+import org.photonvision.PhotonUtils
 import org.photonvision.targeting.PhotonPipelineResult
 import org.photonvision.targeting.PhotonTrackedTarget
 import kotlin.math.max
@@ -18,6 +23,9 @@ class TurntableSubsystem(
 
     val speed: Double
         get() = motor.get()
+
+    var distanceToTarget: Distance? = null
+        private set
 
     var resultsList: MutableList<PhotonPipelineResult> = mutableListOf()
         private set
@@ -39,6 +47,15 @@ class TurntableSubsystem(
         Logger.recordOutput("Turntable/Left Limit", leftLimitReached)
         Logger.recordOutput("Turntable/Right Limit", rightLimitReached)
 
+        checkLimitSwitches()
+
+
+        updateUnreadResults()
+
+        updateDistanceToTarget()
+    }
+
+    private fun checkLimitSwitches() {
         if (!safetyOverride && limitSwitch.get()) {
             if (speedGoesLeft(speed) && !rightLimitReached) {
                 leftLimitReached = true
@@ -53,8 +70,6 @@ class TurntableSubsystem(
             leftLimitReached = false
             rightLimitReached = false
         }
-
-        updateUnreadResults()
     }
 
     private fun updateUnreadResults() {
@@ -68,6 +83,34 @@ class TurntableSubsystem(
         resultsList.sortByDescending { it.timestampSeconds }
 
         targets = resultsList.map { it.targets }.flatten()
+    }
+
+    private fun updateDistanceToTarget() {
+        val availableTargets =
+            targets.filter {
+                TurntableTarget.hubIds.contains(it.fiducialId)
+            }
+
+        if (availableTargets.isEmpty()) {
+            distanceToTarget = null
+            return
+        }
+
+        val target = targets.minByOrNull { TurntableTarget.byId(it.fiducialId).weight }
+
+        if (target == null) {
+            distanceToTarget = null
+            return
+        }
+
+        distanceToTarget = Units.Meters.of(
+            PhotonUtils.calculateDistanceToTargetMeters(
+                DeviceConstants.TURNTABLE_CAMERA_HEIGHT.`in`(Units.Meters),
+                TurntableTarget.byId(target.fiducialId).heightFromFloor.`in`(Units.Meters),
+                DeviceConstants.TURNTABLE_CAMERA_PITCH.`in`(Units.Degrees),
+                target.pitch
+            )
+        )
     }
 
     fun setSpeed(speed: Double) {

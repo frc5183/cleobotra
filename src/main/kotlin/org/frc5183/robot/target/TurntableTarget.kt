@@ -1,12 +1,15 @@
 package org.frc5183.robot.target
 
+import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.DriverStation
 import kotlin.jvm.optionals.getOrNull
 
 enum class TurntableTarget(
     val redId: Int,
     val blueId: Int,
-    val weight: Int
+    val weight: Int,
+    val heightFromFloor: Distance = Units.Inches.of(44.25),
 ) {
     HUB_MIDDLE_RIGHT(10, 26, 3),
     HUB_MIDDLE_LEFT(9, 25, 3),
