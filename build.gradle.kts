@@ -53,6 +53,10 @@ deploy {
                 jvmArgs.add("-XX:GCTimeRatio=5")
                 jvmArgs.add("-XX:+UseSerialGC")
                 jvmArgs.add("-XX:MaxGCPauseMillis=50")
+
+
+                jvmArgs.add("-XX:+HeapDumpOnOutOfMemoryError")
+                jvmArgs.add("-XX:HeapDumpPath=/u/frc-usercode.hprof")
             }
 
             register<FileTreeArtifact>("frcStaticFileDeploy") {
