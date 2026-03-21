@@ -14,12 +14,20 @@ import org.frc5183.robot.target.TurntableTarget
  */
 class AlignTurntable(
     private val turntable: TurntableSubsystem,
+    private val kP: Double = AutoConstants.SHOOTER_ALIGN_KP,
+    private val kI: Double = AutoConstants.SHOOTER_ALIGN_KI,
+    private val kD: Double = AutoConstants.SHOOTER_ALIGN_KD
 ) : Command() {
     init {
         addRequirements(turntable)
     }
 
     private var aligned = false
+    var oscDirection = 0.25
+
+    var integral = 0.0
+    var previousError = 0.0
+    val dt = 0.02  // loop time (20ms typical for FRC)
 
     override fun initialize() {
         aligned = false
@@ -31,30 +39,55 @@ class AlignTurntable(
                 TurntableTarget.hubIds.contains(it.fiducialId)
             }
 
+        println("hi")
+
+        if (turntable.leftLimitReached || turntable.rightLimitReached) return
+
         // We can't see any targets, just spin until we can.
         if (targets.isEmpty()) {
-            oscillate()
+//            oscillate()
+            println("emty")
             return
         }
 
-        val target = targets.minBy { TurntableTarget.byId(it.fiducialId).weight }
+        val target = targets.minByOrNull { TurntableTarget.byId(it.fiducialId).weight }
+
+        if (target == null) {
+            println("Target is null, this is not normal")
+            return
+        }
 
         val yaw = target.yaw
 
+        println("yaw $yaw")
         if (Math.abs(yaw) < AutoConstants.SHOOTER_ALIGN_DEADBAND.`in`(Units.Degrees)) {
             turntable.stop()
+            println("stopping")
             aligned = true
         } else {
-            val turnPower = yaw * AutoConstants.SHOOTER_ALIGN_KP
+            val error = yaw
+
+            integral += error * dt
+
+            val integralLimit = 1.0
+            integral = integral.coerceIn(-integralLimit, integralLimit)
+
+            val derivative = (error - previousError) / dt
+
+            val turnPower = -(kP * error + kI * integral + kD * derivative)
+
             turntable.setSpeed(turnPower)
+            println("setting speed $turnPower")
+
+            previousError = error
         }
     }
 
     private fun oscillate() {
-        if (turntable.leftLimitReached) turntable.setSpeed(-1.0)
-        if (turntable.rightLimitReached) turntable.setSpeed(1.0)
+        if (turntable.leftLimitReached) oscDirection = -0.25
+        if (turntable.rightLimitReached) oscDirection = 0.25
+        turntable.setSpeed(oscDirection)
     }
-
     override fun end(interrupted: Boolean) {
         turntable.stop()
     }

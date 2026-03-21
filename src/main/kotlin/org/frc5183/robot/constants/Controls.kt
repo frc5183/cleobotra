@@ -49,7 +49,7 @@ object Controls {
         OPERATOR_CONTROLLER.a().toggleOnTrue(ShootCommand(shooter))
         OPERATOR_CONTROLLER.x().toggleOnTrue(ReverseShooter(shooter))
 
-//        OPERATOR_CONTROLLER.povUp().toggleOnTrue(ConstantAlignTurntable(turntable, AutoConstants.SHOOTER_ALIGN_KP, AutoConstants.SHOOTER_ALIGN_KI, AutoConstants.SHOOTER_ALIGN_KD))
+//        OPERATOR_CONTROLLER.povUp().toggleOnTrue(ConstantAlignTurntable(turntable))
         OPERATOR_CONTROLLER.povUp().toggleOnTrue(Shoot75Command(shooter))
         OPERATOR_CONTROLLER.povRight().toggleOnTrue(Shoot85Command(shooter))
         OPERATOR_CONTROLLER.povDown().toggleOnTrue(Shoot90Command(shooter))
