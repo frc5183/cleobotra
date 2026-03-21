@@ -16,6 +16,9 @@ class CollectorSubsystem(
     val armSpeed: Double
         get() = arm.get()
 
+    val armVelocity: Double
+        get() = arm.encoder.velocity
+
     val intakeSpeed: Double
         get() = intake.get()
 
@@ -30,9 +33,10 @@ class CollectorSubsystem(
     }
 
     override fun periodic() {
-        Logger.recordOutput("Collector/ArmSpeed", arm.get())
+        Logger.recordOutput("Collector/ArmSpeed", armSpeed)
+        Logger.recordOutput("Collector/ArmVelocity", armVelocity)
 
-        Logger.recordOutput("Collector/IntakeSpeed", intake.get())
+        Logger.recordOutput("Collector/IntakeSpeed", intakeSpeed)
 
         Logger.recordOutput("Collector/Bottom", bottomLimit)
         Logger.recordOutput("Collector/Top", topLimit)

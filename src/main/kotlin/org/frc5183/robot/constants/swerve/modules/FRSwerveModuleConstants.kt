@@ -19,6 +19,6 @@ object FRSwerveModuleConstants : SwerveModuleConstants {
     override val ANGLE_MOTOR_INVERTED: Boolean = false
 
     override val ABSOLUTE_ENCODER: SwerveAbsoluteEncoder = CANCoderSwerve(23)
-    override val ABSOLUTE_ENCODER_OFFSET: Angle = Units.Rotations.of(-0.183)
+    override val ABSOLUTE_ENCODER_OFFSET: Angle = Units.Degrees.of(328.27)
     override val ABSOLUTE_ENCODER_INVERTED: Boolean = false
 }
