@@ -9,7 +9,6 @@ import kotlin.math.sign
 class CollectorSubsystem(
     val arm: SparkMax,
     val intake: SparkMax,
-
     val topLimitSwitch: DigitalInput,
     val bottomLimitSwitch: DigitalInput,
 ) : SubsystemBase() {

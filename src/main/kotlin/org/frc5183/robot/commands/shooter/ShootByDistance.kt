@@ -7,7 +7,7 @@ import org.frc5183.robot.subsystems.shooter.ShooterSubsystem
 
 class ShootByDistance(
     val shooter: ShooterSubsystem,
-    val distanceSupplier: () -> Distance
+    val distanceSupplier: () -> Distance,
 ) : Command() {
     init {
         addRequirements(shooter)

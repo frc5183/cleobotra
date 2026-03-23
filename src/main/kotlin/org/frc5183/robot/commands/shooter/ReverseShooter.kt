@@ -3,7 +3,9 @@ package org.frc5183.robot.commands.shooter
 import edu.wpi.first.wpilibj2.command.Command
 import org.frc5183.robot.subsystems.shooter.ShooterSubsystem
 
-class ReverseShooter(private val shooter: ShooterSubsystem) : Command() {
+class ReverseShooter(
+    private val shooter: ShooterSubsystem,
+) : Command() {
     init {
         addRequirements(shooter)
     }

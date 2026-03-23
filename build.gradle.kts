@@ -54,7 +54,6 @@ deploy {
                 jvmArgs.add("-XX:+UseSerialGC")
                 jvmArgs.add("-XX:MaxGCPauseMillis=50")
 
-
                 jvmArgs.add("-XX:+HeapDumpOnOutOfMemoryError")
                 jvmArgs.add("-XX:HeapDumpPath=/u/frc-usercode.hprof")
             }

@@ -49,7 +49,6 @@ class TurntableSubsystem(
 
         checkLimitSwitches()
 
-
         updateUnreadResults()
 
         updateDistanceToTarget()
@@ -103,14 +102,15 @@ class TurntableSubsystem(
             return
         }
 
-        distanceToTarget = Units.Meters.of(
-            PhotonUtils.calculateDistanceToTargetMeters(
-                DeviceConstants.TURNTABLE_CAMERA_HEIGHT.`in`(Units.Meters),
-                TurntableTarget.byId(target.fiducialId).heightFromFloor.`in`(Units.Meters),
-                DeviceConstants.TURNTABLE_CAMERA_PITCH.`in`(Units.Radians),
-                Units.Degrees.of(target.pitch).`in`(Units.Radians),
+        distanceToTarget =
+            Units.Meters.of(
+                PhotonUtils.calculateDistanceToTargetMeters(
+                    DeviceConstants.TURNTABLE_CAMERA_HEIGHT.`in`(Units.Meters),
+                    TurntableTarget.byId(target.fiducialId).heightFromFloor.`in`(Units.Meters),
+                    DeviceConstants.TURNTABLE_CAMERA_PITCH.`in`(Units.Radians),
+                    Units.Degrees.of(target.pitch).`in`(Units.Radians),
+                ),
             )
-        )
     }
 
     fun setSpeed(speed: Double) {
@@ -125,5 +125,6 @@ class TurntableSubsystem(
     }
 
     fun speedGoesLeft(speed: Double) = speed > 0
+
     fun speedGoesRight(speed: Double) = speed < 0
 }

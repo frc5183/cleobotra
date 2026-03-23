@@ -75,33 +75,37 @@ object Robot : LoggedRobot() {
                     SwerveConstants.YAGSL,
                     SwerveConstants.YAGSL_CONTROLLER_CONFIG,
                     PhysicalConstants.MAX_VELOCITY.`in`(Units.MetersPerSecond),
-                    Pose2d(5.0, 5.0, Rotation2d.kZero)
+                    Pose2d(5.0, 5.0, Rotation2d.kZero),
                 ),
                 null,
             )
 
-        shooter = ShooterSubsystem(
-            DeviceConstants.SHOOTER,
-            DeviceConstants.SHOOTER_INTAKE,
-            DeviceConstants.FEEDER
-        )
+        shooter =
+            ShooterSubsystem(
+                DeviceConstants.SHOOTER,
+                DeviceConstants.SHOOTER_INTAKE,
+                DeviceConstants.FEEDER,
+            )
 
-        collector = CollectorSubsystem(
-            DeviceConstants.COLLECTOR_ARM,
-            DeviceConstants.COLLECTOR_INTAKE,
-            DeviceConstants.COLLECTOR_TOP_LIMIT_SWITCH,
-            DeviceConstants.COLLECTOR_BOTTOM_LIMIT_SWITCH
-        )
+        collector =
+            CollectorSubsystem(
+                DeviceConstants.COLLECTOR_ARM,
+                DeviceConstants.COLLECTOR_INTAKE,
+                DeviceConstants.COLLECTOR_TOP_LIMIT_SWITCH,
+                DeviceConstants.COLLECTOR_BOTTOM_LIMIT_SWITCH,
+            )
 
-        turntable = TurntableSubsystem(
-            DeviceConstants.TURNTABLE_MOTOR,
-            DeviceConstants.TURNTABLE_CAMERA,
-            DeviceConstants.TURNTABLE_LIMIT_SWITCH
-        )
+        turntable =
+            TurntableSubsystem(
+                DeviceConstants.TURNTABLE_MOTOR,
+                DeviceConstants.TURNTABLE_CAMERA,
+                DeviceConstants.TURNTABLE_LIMIT_SWITCH,
+            )
 
-        climber = ClimberSubsystem(
-            DeviceConstants.CLIMBER_MOTOR
-        )
+        climber =
+            ClimberSubsystem(
+                DeviceConstants.CLIMBER_MOTOR,
+            )
 
         autoChooser = AutoBuilder.buildAutoChooser()
         SmartDashboard.putData("Auto Chooser", autoChooser)

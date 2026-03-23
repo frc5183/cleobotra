@@ -17,7 +17,7 @@ class ConstantAlignTurntable(
     private val turntable: TurntableSubsystem,
     private val kP: Double = AutoConstants.SHOOTER_ALIGN_KP,
     private val kI: Double = AutoConstants.SHOOTER_ALIGN_KI,
-    private val kD: Double = AutoConstants.SHOOTER_ALIGN_KD
+    private val kD: Double = AutoConstants.SHOOTER_ALIGN_KD,
 ) : Command() {
     init {
         addRequirements(turntable)
@@ -29,7 +29,7 @@ class ConstantAlignTurntable(
 
     var integral = 0.0
     var previousError = 0.0
-    val dt = 0.02  // loop time (20ms typical for FRC)
+    val dt = 0.02 // loop time (20ms typical for FRC)
 
     override fun initialize() {
         startLoss = true

@@ -31,21 +31,22 @@ object Controls {
         shooter: ShooterSubsystem,
         collector: CollectorSubsystem,
         turntable: TurntableSubsystem,
-        climber: ClimberSubsystem
+        climber: ClimberSubsystem,
     ) {
         CommandScheduler.getInstance().activeButtonLoop.clear()
 
-        val driveInput = SwerveInputStream.of(
-            drive.drive,
-            { DRIVER_CONTROLLER.leftY },
-            { DRIVER_CONTROLLER.leftX }
-        ).withControllerRotationAxis { DRIVER_CONTROLLER.rightX }
-            .deadband(0.2)
-            .scaleTranslation(0.8)
-            .robotRelative(true)
+        val driveInput =
+            SwerveInputStream
+                .of(
+                    drive.drive,
+                    { DRIVER_CONTROLLER.leftY },
+                    { DRIVER_CONTROLLER.leftX },
+                ).withControllerRotationAxis { DRIVER_CONTROLLER.rightX }
+                .deadband(0.2)
+                .scaleTranslation(0.8)
+                .robotRelative(true)
 
         drive.defaultCommand = drive.driveFieldOriented(driveInput)
-
 
         OPERATOR_CONTROLLER.a().toggleOnTrue(ShootCommand(shooter, 1.0))
         OPERATOR_CONTROLLER.x().toggleOnTrue(ReverseShooter(shooter))

@@ -16,7 +16,7 @@ enum class TurntableTarget(
     HUB_LEFT_FAR(5, 21, 1),
     HUB_LEFT_CLOSE(8, 24, 2),
     HUB_RIGHT_FAR(2, 18, 1),
-    HUB_RIGHT_CLOSE(11, 27, 2)
+    HUB_RIGHT_CLOSE(11, 27, 2),
     ;
 
     val id: Int
@@ -29,15 +29,16 @@ enum class TurntableTarget(
 
     companion object {
         val hubIds: IntArray
-            get() = intArrayOf(
-                HUB_MIDDLE_LEFT.id,
-                HUB_MIDDLE_RIGHT.id,
-                HUB_RIGHT_FAR.id,
-                HUB_RIGHT_CLOSE.id,
-                HUB_LEFT_FAR.id,
-                HUB_LEFT_CLOSE.id
-            )
+            get() =
+                intArrayOf(
+                    HUB_MIDDLE_LEFT.id,
+                    HUB_MIDDLE_RIGHT.id,
+                    HUB_RIGHT_FAR.id,
+                    HUB_RIGHT_CLOSE.id,
+                    HUB_LEFT_FAR.id,
+                    HUB_LEFT_CLOSE.id,
+                )
 
-        fun byId(id: Int): TurntableTarget = values().first() { it.id == id }
+        fun byId(id: Int): TurntableTarget = values().first { it.id == id }
     }
 }

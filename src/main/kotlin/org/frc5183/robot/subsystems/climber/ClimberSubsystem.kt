@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 
 class ClimberSubsystem(
-    val motor: SparkMax
+    val motor: SparkMax,
 ) : SubsystemBase() {
     val climberSpeed: Double
         get() = motor.get()

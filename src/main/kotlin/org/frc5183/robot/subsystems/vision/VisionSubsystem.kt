@@ -30,7 +30,7 @@ class VisionSubsystem(
 
         Logger.recordOutput(
             "Vision/EstimatedRobotPoses/Front",
-            frontCamera.estimatedRobotPose?.estimatedPose?.toPose2d()
+            frontCamera.estimatedRobotPose?.estimatedPose?.toPose2d(),
         )
         Logger.recordOutput("Vision/EstimatedRobotPoses/Back", backCamera.estimatedRobotPose?.estimatedPose?.toPose2d())
     }
