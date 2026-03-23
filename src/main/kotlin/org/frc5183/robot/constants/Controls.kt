@@ -24,8 +24,6 @@ object Controls {
     val DRIVER_CONTROLLER: CommandXboxController = CommandXboxController(0)
     val OPERATOR_CONTROLLER: CommandXboxController = CommandXboxController(1)
 
-    lateinit var DRIVE_COMMAND: Command
-
     fun registerControls(
         drive: SwerveDriveSubsystem,
         shooter: ShooterSubsystem,
