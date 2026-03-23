@@ -39,6 +39,6 @@ enum class TurntableTarget(
                     HUB_LEFT_CLOSE.id,
                 )
 
-        fun byId(id: Int): TurntableTarget? = entries.firstOrNull() { it.id == id }
+        fun byId(id: Int): TurntableTarget? = entries.firstOrNull { it.id == id }
     }
 }
