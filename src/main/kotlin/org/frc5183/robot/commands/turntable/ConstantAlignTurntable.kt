@@ -57,7 +57,7 @@ class ConstantAlignTurntable(
             return
         }
 
-        val target = targets.minByOrNull { TurntableTarget.byId(it.fiducialId).weight }
+        val target = targets.minByOrNull { TurntableTarget.byId(it.fiducialId)?.weight ?: 0 }
 
         if (target == null) {
             println("Target is null, this is not normal")

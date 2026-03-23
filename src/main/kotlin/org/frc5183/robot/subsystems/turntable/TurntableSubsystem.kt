@@ -95,9 +95,16 @@ class TurntableSubsystem(
             return
         }
 
-        val target = availableTargets.minByOrNull { TurntableTarget.byId(it.fiducialId).weight }
+        val target = availableTargets.minByOrNull { TurntableTarget.byId(it.fiducialId)?.weight ?: 0 }
 
         if (target == null) {
+            distanceToTarget = null
+            return
+        }
+
+        val turntableTarget = TurntableTarget.byId(target.fiducialId)
+
+        if (turntableTarget == null) {
             distanceToTarget = null
             return
         }
@@ -106,7 +113,7 @@ class TurntableSubsystem(
             Units.Meters.of(
                 PhotonUtils.calculateDistanceToTargetMeters(
                     DeviceConstants.TURNTABLE_CAMERA_HEIGHT.`in`(Units.Meters),
-                    TurntableTarget.byId(target.fiducialId).heightFromFloor.`in`(Units.Meters),
+                    turntableTarget.heightFromFloor.`in`(Units.Meters),
                     DeviceConstants.TURNTABLE_CAMERA_PITCH.`in`(Units.Radians),
                     Units.Degrees.of(target.pitch).`in`(Units.Radians),
                 ),
