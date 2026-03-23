@@ -39,14 +39,9 @@ class AlignTurntable(
                 TurntableTarget.hubIds.contains(it.fiducialId)
             }
 
-        println("hi")
-
-        if (turntable.leftLimitReached || turntable.rightLimitReached) return
-
         // We can't see any targets, just spin until we can.
         if (targets.isEmpty()) {
-//            oscillate()
-            println("emty")
+            oscillate()
             return
         }
 
@@ -59,10 +54,8 @@ class AlignTurntable(
 
         val yaw = target.yaw
 
-        println("yaw $yaw")
         if (Math.abs(yaw) < AutoConstants.SHOOTER_ALIGN_DEADBAND.`in`(Units.Degrees)) {
             turntable.stop()
-            println("stopping")
             aligned = true
         } else {
             val error = yaw
@@ -77,7 +70,6 @@ class AlignTurntable(
             val turnPower = -(kP * error + kI * integral + kD * derivative)
 
             turntable.setSpeed(turnPower)
-            println("setting speed $turnPower")
 
             previousError = error
         }
