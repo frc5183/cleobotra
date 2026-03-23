@@ -1,31 +1,31 @@
 package org.frc5183.robot.subsystems.collector
 
+import com.revrobotics.spark.SparkMax
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import org.frc5183.robot.subsystems.collector.io.CollectorIO
-import org.frc5183.robot.subsystems.collector.io.CollectorIOInputs
+import org.littletonrobotics.junction.Logger
 
 class CollectorSubsystem(
-    private val io: CollectorIO,
+    val arm: SparkMax,
+    val intake: SparkMax,
 ) : SubsystemBase() {
-    private val ioInputs = CollectorIOInputs()
-
     override fun periodic() {
-        io.updateInputs(ioInputs)
+        Logger.recordOutput("Collector/ArmSpeed", arm.get())
+        Logger.recordOutput("Collector/IntakeSpeed", intake.get())
     }
 
     fun runArm(speed: Double) {
-        io.runArm(speed)
+        arm.set(speed)
     }
 
     fun runIntake(speed: Double) {
-        io.runIntake(speed)
+        intake.set(speed)
     }
 
     fun stopArm() {
-        io.stopArm()
+        arm.stopMotor()
     }
 
     fun stopIntake() {
-        io.stopIntake()
+        intake.stopMotor()
     }
 }

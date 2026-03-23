@@ -10,43 +10,43 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.math.numbers.N1
+import edu.wpi.first.math.numbers.N3
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Force
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.frc5183.robot.constants.AutoConstants
+import org.frc5183.robot.constants.PhysicalConstants
 import org.frc5183.robot.constants.swerve.SwerveConstants
 import org.frc5183.robot.constants.swerve.SwervePIDConstants
 import org.frc5183.robot.constants.swerve.toPathPlannerPIDConstants
 import org.frc5183.robot.math.pathfinding.LocalADStarAK
-import org.frc5183.robot.subsystems.drive.io.SwerveDriveIO
-import org.frc5183.robot.subsystems.drive.io.SwerveDriveIOInputs
 import org.frc5183.robot.subsystems.vision.VisionSubsystem
-import org.littletonrobotics.junction.Logger
+import swervelib.SwerveDrive
 import swervelib.math.SwerveMath
 import swervelib.telemetry.SwerveDriveTelemetry
 import kotlin.jvm.optionals.getOrNull
 
 class SwerveDriveSubsystem(
-    private val io: SwerveDriveIO,
-    private val vision: VisionSubsystem? = null,
+    val drive: SwerveDrive,
+    val vision: VisionSubsystem?,
 ) : SubsystemBase() {
-    private val ioInputs = SwerveDriveIOInputs()
-
     val robotPose: Pose2d
-        get() = ioInputs.pose
+        get() = drive.pose
 
     val robotVelocity: ChassisSpeeds
-        get() = ioInputs.robotVelocity
+        get() = drive.robotVelocity
 
     val fieldVelocity: ChassisSpeeds
-        get() = ioInputs.fieldVelocity
+        get() = drive.fieldVelocity
 
     val moduleStates: Array<out SwerveModuleState>
-        get() = ioInputs.moduleStates
+        get() = drive.states
 
     val kinematics: SwerveDriveKinematics
-        get() = ioInputs.kinematics
+        get() = drive.kinematics
 
     init {
         SwerveDriveTelemetry.verbosity = SwerveConstants.VERBOSITY
@@ -75,20 +75,36 @@ class SwerveDriveSubsystem(
 
         // https://pathplanner.dev/pplib-follow-a-single-path.html#java-warmup
         CommandScheduler.getInstance().schedule(PathfindingCommand.warmupCommand())
-    }
 
-    override fun periodic() {
-        io.updateInputs(ioInputs)
-        Logger.processInputs("Swerve", ioInputs)
-
-        vision?.estimatedRobotPoses?.forEach { (camera, pose) ->
-            io.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds, camera.currentStandardDeviations)
+        if (vision != null) {
+            drive.stopOdometryThread()
         }
     }
 
-    fun setMotorBrake(brake: Boolean) = io.setMotorBrake(brake)
+    override fun periodic() {
+        if (vision != null) {
+            vision.frontRobotPose?.let {
+                addVisionMeasurement(it.estimatedPose.toPose2d(), it.timestampSeconds, vision.frontCamera.currentStandardDeviations)
+            }
 
-    fun resetPose(pose: Pose2d = Pose2d.kZero) = io.resetPose(pose)
+            vision.backRobotPose?.let {
+                addVisionMeasurement(it.estimatedPose.toPose2d(), it.timestampSeconds, vision.backCamera.currentStandardDeviations)
+            }
+
+            drive.updateOdometry()
+        }
+    }
+
+    private fun addVisionMeasurement(
+        pose: Pose2d,
+        timestampSeconds: Double,
+        standardDeviations: 
+      <N3, N1>,
+    ) = drive.addVisionMeasurement(pose, timestampSeconds, standardDeviations)
+
+    fun setMotorBrake(brake: Boolean) = drive.setMotorIdleMode(brake)
+
+    fun resetPose(pose: Pose2d = Pose2d.kZero) = drive.resetOdometry(pose)
 
     fun getTargetSpeeds(
         x: Double,
@@ -97,7 +113,14 @@ class SwerveDriveSubsystem(
         headingY: Double = 0.0,
     ): ChassisSpeeds {
         val scaledInputs = SwerveMath.cubeTranslation(Translation2d(x, y))
-        return io.getTargetSpeeds(scaledInputs.x, scaledInputs.y, headingX, headingY)
+        return drive.swerveController.getTargetSpeeds(
+            scaledInputs.x,
+            scaledInputs.y,
+            headingX,
+            headingY,
+            drive.pose.rotation.radians,
+            PhysicalConstants.MAX_VELOCITY.`in`(Units.MetersPerSecond),
+        )
     }
 
     fun drive(
@@ -105,15 +128,15 @@ class SwerveDriveSubsystem(
         rotation: Double,
         fieldOriented: Boolean,
         openLoop: Boolean = false,
-    ) = io.drive(translation, rotation, fieldOriented, openLoop)
+    ) = drive.drive(translation, rotation, fieldOriented, openLoop)
 
     fun drive(
         robotRelativeVelocity: ChassisSpeeds,
         states: Array<out SwerveModuleState>,
         feedforwardForces: Array<out Force>,
-    ) = io.drive(robotRelativeVelocity, states, feedforwardForces)
+    ) = drive.drive(robotRelativeVelocity, states, feedforwardForces)
 
-    fun driveFieldOriented(speeds: ChassisSpeeds) = io.driveFieldOriented(speeds)
+    fun driveFieldOriented(speeds: ChassisSpeeds) = drive.driveFieldOriented(speeds)
 
-    fun driveRobotOriented(speeds: ChassisSpeeds) = io.driveRobotOriented(speeds)
+    fun driveRobotOriented(speeds: ChassisSpeeds) = drive.drive(speeds)
 }
