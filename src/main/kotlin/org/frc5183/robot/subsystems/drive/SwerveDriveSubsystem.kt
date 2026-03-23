@@ -71,6 +71,11 @@ class SwerveDriveSubsystem(
                         feedforwards.linearForces(),
                     )
                 } else driveRobotOriented(robotRelativeSpeeds)
+                drive(
+                    robotRelativeSpeeds,
+                    kinematics.toSwerveModuleStates(robotRelativeSpeeds),
+                    feedforwards.linearForces(),
+                )
             },
             PPHolonomicDriveController(
                 SwervePIDConstants.DRIVE_PID.toPathPlannerPIDConstants(),
@@ -108,7 +113,8 @@ class SwerveDriveSubsystem(
     private fun addVisionMeasurement(
         pose: Pose2d,
         timestampSeconds: Double,
-        standardDeviations: Matrix<N3, N1>,
+        standardDeviations: 
+      <N3, N1>,
     ) = drive.addVisionMeasurement(pose, timestampSeconds, standardDeviations)
 
     fun setMotorBrake(brake: Boolean) = drive.setMotorIdleMode(brake)
