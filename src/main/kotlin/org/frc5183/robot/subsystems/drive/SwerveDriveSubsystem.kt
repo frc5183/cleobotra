@@ -4,7 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.commands.PathfindingCommand
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.pathfinding.Pathfinding
-import edu.wpi.first.math.Matrix
+import com.pathplanner.lib.util.DriveFeedforwards
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
@@ -55,7 +55,13 @@ class SwerveDriveSubsystem(
             { robotPose },
             this::resetPose,
             { robotVelocity },
-            { robotRelativeSpeeds: ChassisSpeeds -> drive(robotRelativeSpeeds) },
+            { robotRelativeSpeeds: ChassisSpeeds, feedforwards: DriveFeedforwards ->
+                drive(
+                    robotRelativeSpeeds,
+                    kinematics.toSwerveModuleStates(robotRelativeSpeeds),
+                    feedforwards.linearForces(),
+                )
+            },
             PPHolonomicDriveController(
                 SwervePIDConstants.DRIVE_PID.toPathPlannerPIDConstants(),
                 SwervePIDConstants.ANGLE_PID.toPathPlannerPIDConstants(),
@@ -92,7 +98,8 @@ class SwerveDriveSubsystem(
     private fun addVisionMeasurement(
         pose: Pose2d,
         timestampSeconds: Double,
-        standardDeviations: Matrix<N3, N1>,
+        standardDeviations: 
+      <N3, N1>,
     ) = drive.addVisionMeasurement(pose, timestampSeconds, standardDeviations)
 
     fun setMotorBrake(brake: Boolean) = drive.setMotorIdleMode(brake)
