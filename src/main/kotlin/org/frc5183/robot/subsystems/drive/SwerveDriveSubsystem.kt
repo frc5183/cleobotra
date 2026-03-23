@@ -5,11 +5,14 @@ import com.pathplanner.lib.commands.PathfindingCommand
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.pathfinding.Pathfinding
 import com.pathplanner.lib.util.DriveFeedforwards
+import edu.wpi.first.math.Matrix
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.math.numbers.N1
+import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Force
 import edu.wpi.first.wpilibj.DriverStation
@@ -67,7 +70,9 @@ class SwerveDriveSubsystem(
                         kinematics.toSwerveModuleStates(robotRelativeSpeeds),
                         feedforwards.linearForces(),
                     )
-                } else driveRobotOriented(robotRelativeSpeeds)
+                } else {
+                    driveRobotOriented(robotRelativeSpeeds)
+                }
                 drive(
                     robotRelativeSpeeds,
                     kinematics.toSwerveModuleStates(robotRelativeSpeeds),
@@ -99,7 +104,7 @@ class SwerveDriveSubsystem(
                 addVisionMeasurement(
                     it.estimatedPose.toPose2d(),
                     it.timestampSeconds,
-                    vision.frontCamera.currentStandardDeviations
+                    vision.frontCamera.currentStandardDeviations,
                 )
             }
 
@@ -107,7 +112,7 @@ class SwerveDriveSubsystem(
                 addVisionMeasurement(
                     it.estimatedPose.toPose2d(),
                     it.timestampSeconds,
-                    vision.backCamera.currentStandardDeviations
+                    vision.backCamera.currentStandardDeviations,
                 )
             }
 
@@ -118,8 +123,7 @@ class SwerveDriveSubsystem(
     private fun addVisionMeasurement(
         pose: Pose2d,
         timestampSeconds: Double,
-        standardDeviations:
-        <N3, N1>,
+        standardDeviations: Matrix<N3, N1>,
     ) = drive.addVisionMeasurement(pose, timestampSeconds, standardDeviations)
 
     fun setMotorBrake(brake: Boolean) = drive.setMotorIdleMode(brake)
@@ -158,11 +162,9 @@ class SwerveDriveSubsystem(
 
     fun driveFieldOriented(speeds: ChassisSpeeds) = drive.driveFieldOriented(speeds)
 
-    fun driveFieldOriented(speedsSupplier: Supplier<ChassisSpeeds>): Command =
-        run { driveFieldOriented(speedsSupplier.get()) }
+    fun driveFieldOriented(speedsSupplier: Supplier<ChassisSpeeds>): Command = run { driveFieldOriented(speedsSupplier.get()) }
 
     fun driveRobotOriented(speeds: ChassisSpeeds) = drive.drive(speeds)
 
-    fun driveRobotOriented(speedsSupplier: Supplier<ChassisSpeeds>): Command =
-        run { driveRobotOriented(speedsSupplier.get()) }
+    fun driveRobotOriented(speedsSupplier: Supplier<ChassisSpeeds>): Command = run { driveRobotOriented(speedsSupplier.get()) }
 }
