@@ -107,8 +107,8 @@ class TurntableSubsystem(
             PhotonUtils.calculateDistanceToTargetMeters(
                 DeviceConstants.TURNTABLE_CAMERA_HEIGHT.`in`(Units.Meters),
                 TurntableTarget.byId(target.fiducialId).heightFromFloor.`in`(Units.Meters),
-                DeviceConstants.TURNTABLE_CAMERA_PITCH.`in`(Units.Degrees),
-                target.pitch
+                DeviceConstants.TURNTABLE_CAMERA_PITCH.`in`(Units.Radians),
+                Units.Degrees.of(target.pitch).`in`(Units.Radians),
             )
         )
     }

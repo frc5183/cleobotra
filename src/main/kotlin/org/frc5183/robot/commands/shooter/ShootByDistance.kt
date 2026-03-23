@@ -5,7 +5,7 @@ import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.Command
 import org.frc5183.robot.subsystems.shooter.ShooterSubsystem
 
-class ShootByDistance (
+class ShootByDistance(
     val shooter: ShooterSubsystem,
     val distanceSupplier: () -> Distance
 ) : Command() {
