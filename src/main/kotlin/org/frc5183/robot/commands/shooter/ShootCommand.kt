@@ -5,13 +5,14 @@ import org.frc5183.robot.subsystems.shooter.ShooterSubsystem
 
 class ShootCommand(
     private val shooter: ShooterSubsystem,
+    private val power: Double,
 ) : Command() {
     init {
         addRequirements(shooter)
     }
 
     override fun initialize() {
-        shooter.run(1.0)
+        shooter.shoot(-power.coerceIn(-1.0, 1.0))
     }
 
     override fun end(interrupted: Boolean) {

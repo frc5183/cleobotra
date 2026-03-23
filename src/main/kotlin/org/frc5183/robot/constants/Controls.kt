@@ -46,14 +46,14 @@ object Controls {
         drive.defaultCommand = drive.driveFieldOriented(driveInput)
 
 
-        OPERATOR_CONTROLLER.a().toggleOnTrue(ShootCommand(shooter))
+        OPERATOR_CONTROLLER.a().toggleOnTrue(ShootCommand(shooter, 1.0))
         OPERATOR_CONTROLLER.x().toggleOnTrue(ReverseShooter(shooter))
 
 //        OPERATOR_CONTROLLER.povUp().toggleOnTrue(ConstantAlignTurntable(turntable))
-        OPERATOR_CONTROLLER.povUp().toggleOnTrue(Shoot75Command(shooter))
-        OPERATOR_CONTROLLER.povRight().toggleOnTrue(Shoot85Command(shooter))
-        OPERATOR_CONTROLLER.povDown().toggleOnTrue(Shoot90Command(shooter))
-        OPERATOR_CONTROLLER.povLeft().toggleOnTrue(Shoot95Command(shooter))
+        OPERATOR_CONTROLLER.povUp().toggleOnTrue(ShootCommand(shooter, 0.75))
+        OPERATOR_CONTROLLER.povRight().toggleOnTrue(ShootCommand(shooter, 0.85))
+        OPERATOR_CONTROLLER.povDown().toggleOnTrue(ShootCommand(shooter, 0.90))
+        OPERATOR_CONTROLLER.povLeft().toggleOnTrue(ShootCommand(shooter, 0.95))
 
         OPERATOR_CONTROLLER.rightBumper().onTrue(LowerCollector(collector))
         OPERATOR_CONTROLLER.leftBumper().onTrue(RaiseCollector(collector))
