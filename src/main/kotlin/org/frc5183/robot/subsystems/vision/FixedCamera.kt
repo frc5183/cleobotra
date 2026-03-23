@@ -54,7 +54,8 @@ class FixedCamera(
     /**
      * Pose estimator for camera.
      */
-    private val poseEstimator = PhotonPoseEstimator(AprilTagFieldLayout.loadField(VisionConstants.APRIL_TAG_LAYOUT), transform)
+    private val poseEstimator =
+        PhotonPoseEstimator(AprilTagFieldLayout.loadField(VisionConstants.APRIL_TAG_LAYOUT), transform)
 
     /**
      * Current standard deviations used.

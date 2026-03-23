@@ -23,6 +23,7 @@ class ShootByDistance(
         val distanceMeters = distance.`in`(Units.Meters)
         return ((0.0447387 * distanceMeters) + 0.640909).coerceIn(0.75, 1.0)
     }
+
     override fun end(interrupted: Boolean) {
         shooter.stop()
     }

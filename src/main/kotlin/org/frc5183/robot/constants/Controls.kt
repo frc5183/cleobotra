@@ -10,7 +10,8 @@ import org.frc5183.robot.commands.collector.DriveCollector
 import org.frc5183.robot.commands.collector.IntakeCommand
 import org.frc5183.robot.commands.collector.LowerCollector
 import org.frc5183.robot.commands.collector.RaiseCollector
-import org.frc5183.robot.commands.shooter.*
+import org.frc5183.robot.commands.shooter.ReverseShooter
+import org.frc5183.robot.commands.shooter.ShootCommand
 import org.frc5183.robot.commands.turntable.DriveTurntable
 import org.frc5183.robot.subsystems.climber.ClimberSubsystem
 import org.frc5183.robot.subsystems.collector.CollectorSubsystem

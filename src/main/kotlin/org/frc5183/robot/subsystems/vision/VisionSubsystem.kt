@@ -28,7 +28,10 @@ class VisionSubsystem(
         Logger.recordOutput("Vision/Targets/Front", frontTargets.map { it.fiducialId }.toIntArray())
         Logger.recordOutput("Vision/Targets/Back", backTargets.map { it.fiducialId }.toIntArray())
 
-        Logger.recordOutput("Vision/EstimatedRobotPoses/Front", frontCamera.estimatedRobotPose?.estimatedPose?.toPose2d())
+        Logger.recordOutput(
+            "Vision/EstimatedRobotPoses/Front",
+            frontCamera.estimatedRobotPose?.estimatedPose?.toPose2d()
+        )
         Logger.recordOutput("Vision/EstimatedRobotPoses/Back", backCamera.estimatedRobotPose?.estimatedPose?.toPose2d())
     }
 }

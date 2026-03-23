@@ -84,6 +84,7 @@ class AlignTurntable(
         if (turntable.rightLimitReached) oscDirection = 0.25
         turntable.setSpeed(oscDirection)
     }
+
     override fun end(interrupted: Boolean) {
         turntable.stop()
     }
