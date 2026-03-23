@@ -48,7 +48,7 @@ class ConstantAlignTurntable(
             }
 
         // We can't see any targets, just spin until we can.
-        if (targets.isEmpty() && (startLoss || lossTimer.advanceIfElapsed(4.0))) {
+        if (targets.isEmpty() && (startLoss || lossTimer.hasElapsed(4.0))) {
             startLoss = false
             oscillate()
             return
