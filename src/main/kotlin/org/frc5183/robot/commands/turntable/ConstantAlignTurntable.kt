@@ -35,6 +35,10 @@ class ConstantAlignTurntable(
         startLoss = true
         lossTimer.reset()
         lossTimer.start()
+
+        integral = 0.0
+        previousError = 0.0
+        oscDirection = 0.25
     }
 
     override fun execute() {

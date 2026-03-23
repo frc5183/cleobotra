@@ -31,6 +31,10 @@ class AlignTurntable(
 
     override fun initialize() {
         aligned = false
+
+        integral = 0.0
+        previousError = 0.0
+        oscDirection = 0.25
     }
 
     override fun execute() {
