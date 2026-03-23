@@ -95,7 +95,7 @@ class TurntableSubsystem(
             return
         }
 
-        val target = targets.minByOrNull { TurntableTarget.byId(it.fiducialId).weight }
+        val target = availableTargets.minByOrNull { TurntableTarget.byId(it.fiducialId).weight }
 
         if (target == null) {
             distanceToTarget = null
