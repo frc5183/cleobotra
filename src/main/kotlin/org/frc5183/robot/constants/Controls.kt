@@ -44,6 +44,7 @@ object Controls {
                 .scaleTranslation(0.8)
                 .robotRelative(true)
 
+        // SwerveInputStream always supplies field oriented chassis speeds it seems.
         drive.defaultCommand = drive.driveFieldOriented(driveInput)
 
         OPERATOR_CONTROLLER.a().toggleOnTrue(ShootCommand(shooter, 1.0))
