@@ -107,13 +107,13 @@ object Robot : LoggedRobot() {
                 DeviceConstants.CLIMBER_MOTOR,
             )
 
-        autoChooser = AutoBuilder.buildAutoChooser()
-        SmartDashboard.putData("Auto Chooser", autoChooser)
-
         NamedCommands.registerCommand("Lower Collector", LowerCollector(collector))
         NamedCommands.registerCommand("Raise Collector", RaiseCollector(collector))
         NamedCommands.registerCommand("Run Collector Intake", IntakeCommand(collector))
         NamedCommands.registerCommand("Turret Shoot", AlignAndShoot(shooter, turntable))
+
+        autoChooser = AutoBuilder.buildAutoChooser()
+        SmartDashboard.putData("Auto Chooser", autoChooser)
     }
 
     override fun robotPeriodic() {
