@@ -18,7 +18,7 @@ class AlignAndShoot(
         addCommands(
             AlignTurntable(turntable),
             ParallelCommandGroup(
-                ShootCommand(shooter),
+                ShootByDistance(shooter, { turntable.distanceToTarget }),
                 ConstantAlignTurntable(turntable),
             ),
         )

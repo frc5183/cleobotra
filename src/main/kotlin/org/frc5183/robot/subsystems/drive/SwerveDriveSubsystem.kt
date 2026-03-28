@@ -5,6 +5,7 @@ import com.pathplanner.lib.commands.PathfindingCommand
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.pathfinding.Pathfinding
 import com.pathplanner.lib.util.DriveFeedforwards
+import edu.wpi.first.math.Matrix
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
@@ -15,6 +16,7 @@ import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Force
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.frc5183.robot.constants.AutoConstants
@@ -27,6 +29,7 @@ import org.frc5183.robot.subsystems.vision.VisionSubsystem
 import swervelib.SwerveDrive
 import swervelib.math.SwerveMath
 import swervelib.telemetry.SwerveDriveTelemetry
+import java.util.function.Supplier
 import kotlin.jvm.optionals.getOrNull
 
 class SwerveDriveSubsystem(
@@ -51,11 +54,25 @@ class SwerveDriveSubsystem(
     init {
         SwerveDriveTelemetry.verbosity = SwerveConstants.VERBOSITY
 
+        drive.headingCorrection = false
+        drive.setCosineCompensator(false)
+        drive.setAngularVelocityCompensation(true, false, 0.1)
+        drive.setModuleEncoderAutoSynchronize(true, 1.0)
+
         AutoBuilder.configure(
             { robotPose },
             this::resetPose,
             { robotVelocity },
             { robotRelativeSpeeds: ChassisSpeeds, feedforwards: DriveFeedforwards ->
+                if (AutoConstants.USE_FEED_FORWARD) {
+                    drive(
+                        robotRelativeSpeeds,
+                        kinematics.toSwerveModuleStates(robotRelativeSpeeds),
+                        feedforwards.linearForces(),
+                    )
+                } else {
+                    driveRobotOriented(robotRelativeSpeeds)
+                }
                 drive(
                     robotRelativeSpeeds,
                     kinematics.toSwerveModuleStates(robotRelativeSpeeds),
@@ -84,11 +101,19 @@ class SwerveDriveSubsystem(
     override fun periodic() {
         if (vision != null) {
             vision.frontRobotPose?.let {
-                addVisionMeasurement(it.estimatedPose.toPose2d(), it.timestampSeconds, vision.frontCamera.currentStandardDeviations)
+                addVisionMeasurement(
+                    it.estimatedPose.toPose2d(),
+                    it.timestampSeconds,
+                    vision.frontCamera.currentStandardDeviations,
+                )
             }
 
             vision.backRobotPose?.let {
-                addVisionMeasurement(it.estimatedPose.toPose2d(), it.timestampSeconds, vision.backCamera.currentStandardDeviations)
+                addVisionMeasurement(
+                    it.estimatedPose.toPose2d(),
+                    it.timestampSeconds,
+                    vision.backCamera.currentStandardDeviations,
+                )
             }
 
             drive.updateOdometry()
@@ -98,8 +123,7 @@ class SwerveDriveSubsystem(
     private fun addVisionMeasurement(
         pose: Pose2d,
         timestampSeconds: Double,
-        standardDeviations: 
-      <N3, N1>,
+        standardDeviations: Matrix<N3, N1>,
     ) = drive.addVisionMeasurement(pose, timestampSeconds, standardDeviations)
 
     fun setMotorBrake(brake: Boolean) = drive.setMotorIdleMode(brake)
@@ -138,5 +162,9 @@ class SwerveDriveSubsystem(
 
     fun driveFieldOriented(speeds: ChassisSpeeds) = drive.driveFieldOriented(speeds)
 
+    fun driveFieldOriented(speedsSupplier: Supplier<ChassisSpeeds>): Command = run { driveFieldOriented(speedsSupplier.get()) }
+
     fun driveRobotOriented(speeds: ChassisSpeeds) = drive.drive(speeds)
+
+    fun driveRobotOriented(speedsSupplier: Supplier<ChassisSpeeds>): Command = run { driveRobotOriented(speedsSupplier.get()) }
 }

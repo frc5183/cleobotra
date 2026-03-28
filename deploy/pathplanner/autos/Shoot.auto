@@ -1,0 +1,50 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to Fuel"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Lower Collector"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Run Collector Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pickup Fuel"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Turret Shoot"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

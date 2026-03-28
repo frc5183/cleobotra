@@ -2,7 +2,6 @@ package org.frc5183.robot.commands.collector
 
 import edu.wpi.first.wpilibj2.command.Command
 import org.frc5183.robot.subsystems.collector.CollectorSubsystem
-import org.frc5183.robot.subsystems.shooter.ShooterSubsystem
 
 class IntakeCommand(
     val collector: CollectorSubsystem,
@@ -12,7 +11,7 @@ class IntakeCommand(
     }
 
     override fun initialize() {
-        collector.runIntake(1.0)
+        collector.runIntake(-0.8)
     }
 
     override fun end(interrupted: Boolean) {

@@ -23,9 +23,9 @@ object SwerveConstants {
         SwerveDriveConfiguration(
             listOf(
                 FLSwerveModuleConstants.YAGSL,
-                FRSwerveModuleConstant.YAGSL,
-                BLSwerveModuleConstant.YAGSL,
-                BRSwerveModuleConstant.YAGSL,
+                FRSwerveModuleConstants.YAGSL,
+                BLSwerveModuleConstants.YAGSL,
+                BRSwerveModuleConstants.YAGSL,
             ).toTypedArray(),
             IMU,
             IMU_INVERTED,
