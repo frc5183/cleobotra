@@ -30,7 +30,7 @@ object SwerveModulePhysicalConstants {
     val WHEEL_DIAMETER: Distance = Units.Inches.of(4.0)
 
     val MAX_DRIVE_VELOCITY =
-        Units.MetersPerSecond.of(5.0) // TODO: https://pathplanner.dev/robot-config.html#module-config-options
+        Units.MetersPerSecond.of(5.425) // TODO: https://pathplanner.dev/robot-config.html#module-config-options
 
     val CONVERSION_FACTORS: ConversionFactorsJson =
         ConversionFactorsJson().apply {
