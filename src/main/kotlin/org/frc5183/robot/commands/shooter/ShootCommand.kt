@@ -12,7 +12,7 @@ class ShootCommand(
     }
 
     override fun initialize() {
-        shooter.shoot(-power.coerceIn(-1.0, 1.0))
+        shooter.shoot(power.coerceIn(-1.0, 1.0))
     }
 
     override fun end(interrupted: Boolean) {
