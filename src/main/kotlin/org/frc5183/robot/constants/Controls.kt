@@ -1,6 +1,5 @@
 package org.frc5183.robot.constants
 
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
@@ -10,8 +9,11 @@ import org.frc5183.robot.commands.collector.DriveCollector
 import org.frc5183.robot.commands.collector.IntakeCommand
 import org.frc5183.robot.commands.collector.LowerCollector
 import org.frc5183.robot.commands.collector.RaiseCollector
+import org.frc5183.robot.commands.drive.DriveTest
 import org.frc5183.robot.commands.shooter.ReverseShooter
+import org.frc5183.robot.commands.shooter.ShootByDistance
 import org.frc5183.robot.commands.shooter.ShootCommand
+import org.frc5183.robot.commands.turntable.ConstantAlignTurntable
 import org.frc5183.robot.commands.turntable.DriveTurntable
 import org.frc5183.robot.subsystems.climber.ClimberSubsystem
 import org.frc5183.robot.subsystems.collector.CollectorSubsystem
@@ -37,7 +39,7 @@ object Controls {
             SwerveInputStream
                 .of(
                     drive.drive,
-                    { DRIVER_CONTROLLER.leftY },
+                    { -DRIVER_CONTROLLER.leftY },
                     { DRIVER_CONTROLLER.leftX },
                 ).withControllerRotationAxis { DRIVER_CONTROLLER.rightX }
                 .deadband(0.2)
@@ -47,12 +49,11 @@ object Controls {
         // SwerveInputStream always supplies field oriented chassis speeds it seems.
         drive.defaultCommand = drive.driveFieldOriented(driveInput)
 
-        OPERATOR_CONTROLLER.a().toggleOnTrue(ShootCommand(shooter, 1.0))
+        OPERATOR_CONTROLLER.a().toggleOnTrue(ShootByDistance(shooter, { turntable.distanceToTarget }))
         OPERATOR_CONTROLLER.x().toggleOnTrue(ReverseShooter(shooter))
 
-//        OPERATOR_CONTROLLER.povUp().toggleOnTrue(ConstantAlignTurntable(turntable))
         OPERATOR_CONTROLLER.povUp().toggleOnTrue(ShootCommand(shooter, 0.75))
-        OPERATOR_CONTROLLER.povRight().toggleOnTrue(ShootCommand(shooter, 0.85))
+        OPERATOR_CONTROLLER.povRight().toggleOnTrue(ShootCommand(shooter, 0.25))
         OPERATOR_CONTROLLER.povDown().toggleOnTrue(ShootCommand(shooter, 0.90))
         OPERATOR_CONTROLLER.povLeft().toggleOnTrue(ShootCommand(shooter, 0.95))
 
@@ -67,5 +68,17 @@ object Controls {
 
         DRIVER_CONTROLLER.b().onTrue(InstantCommand({ CommandScheduler.getInstance().cancelAll() }))
         OPERATOR_CONTROLLER.b().onTrue(InstantCommand({ CommandScheduler.getInstance().cancelAll() }))
+    }
+
+    fun registerTestingControls(
+        drive: SwerveDriveSubsystem,
+        shooter: ShooterSubsystem,
+        collector: CollectorSubsystem,
+        turntable: TurntableSubsystem,
+        climber: ClimberSubsystem,
+    ) {
+        OPERATOR_CONTROLLER.a().toggleOnTrue(DriveTest(drive))
+
+        OPERATOR_CONTROLLER.povUp().toggleOnTrue(ConstantAlignTurntable(turntable))
     }
 }
