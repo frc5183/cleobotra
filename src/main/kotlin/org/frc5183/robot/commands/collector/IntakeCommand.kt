@@ -11,7 +11,7 @@ class IntakeCommand(
     }
 
     override fun initialize() {
-        collector.runIntake(-0.8)
+        collector.runIntake(-0.5)
     }
 
     override fun end(interrupted: Boolean) {
