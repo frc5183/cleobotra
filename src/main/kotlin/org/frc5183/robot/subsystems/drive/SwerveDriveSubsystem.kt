@@ -54,9 +54,9 @@ class SwerveDriveSubsystem(
     init {
         SwerveDriveTelemetry.verbosity = SwerveConstants.VERBOSITY
 
-        drive.headingCorrection = true
+        drive.headingCorrection = false
         drive.setCosineCompensator(false)
-        drive.setAngularVelocityCompensation(true, true, 0.1)
+        drive.setAngularVelocityCompensation(true, false, 0.1)
         drive.setModuleEncoderAutoSynchronize(true, 1.0)
 
         val guiSettings = RobotConfig.fromGUISettings()
@@ -79,7 +79,7 @@ class SwerveDriveSubsystem(
             },
             PPHolonomicDriveController(
                 PIDConstants(1.0, 0.0, 0.0),
-                PIDConstants(1.0, 0.0, 0.0)
+                PIDConstants(5.0, 0.0, 0.0)
             ),
             guiSettings,
             { DriverStation.getAlliance().getOrNull() == DriverStation.Alliance.Red },

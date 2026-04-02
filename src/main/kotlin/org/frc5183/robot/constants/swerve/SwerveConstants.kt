@@ -15,7 +15,7 @@ object SwerveConstants {
     val VERBOSITY: SwerveDriveTelemetry.TelemetryVerbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH
 
     val IMU: SwerveIMU = NavXSwerve(DeviceConstants.IMUPort)
-    val IMU_INVERTED: Boolean = true
+    val IMU_INVERTED: Boolean = false
 
     val COSINE_COMPENSATOR: Boolean = false
 

@@ -9,7 +9,6 @@ import org.frc5183.robot.commands.collector.DriveCollector
 import org.frc5183.robot.commands.collector.IntakeCommand
 import org.frc5183.robot.commands.collector.LowerCollector
 import org.frc5183.robot.commands.collector.RaiseCollector
-import org.frc5183.robot.commands.drive.DriveTest
 import org.frc5183.robot.commands.shooter.ReverseShooter
 import org.frc5183.robot.commands.shooter.ShootByDistance
 import org.frc5183.robot.commands.shooter.ShootCommand
@@ -39,7 +38,7 @@ object Controls {
             SwerveInputStream
                 .of(
                     drive.drive,
-                    { -DRIVER_CONTROLLER.leftY },
+                    { DRIVER_CONTROLLER.leftY },
                     { DRIVER_CONTROLLER.leftX },
                 ).withControllerRotationAxis { DRIVER_CONTROLLER.rightX }
                 .deadband(0.2)
@@ -77,8 +76,6 @@ object Controls {
         turntable: TurntableSubsystem,
         climber: ClimberSubsystem,
     ) {
-        OPERATOR_CONTROLLER.a().toggleOnTrue(DriveTest(drive))
-
         OPERATOR_CONTROLLER.povUp().toggleOnTrue(ConstantAlignTurntable(turntable))
     }
 }
