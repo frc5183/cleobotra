@@ -8,81 +8,61 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.251097748214505,
-        "y": 7.3436729921212125
+        "x": 4.181045452463328,
+        "y": 7.261122365243331
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Start"
     },
     {
       "anchor": {
-        "x": 8.209480963659503,
-        "y": 6.833304051187784
+        "x": 0.35,
+        "y": 6.767534687853507
       },
       "prevControl": {
-        "x": 5.5169892453046625,
-        "y": 7.850851075684471
+        "x": 0.4917239950376696,
+        "y": 8.111783972952363
       },
       "nextControl": {
-        "x": 9.014667336412002,
-        "y": 6.529007851435607
+        "x": 0.305213871606335,
+        "y": 6.342739147341629
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.061389679369343,
-        "y": 3.9226991126979636
+        "x": 0.35,
+        "y": 5.482166466346154
       },
       "prevControl": {
-        "x": 9.088944156469857,
-        "y": 4.311603298598135
+        "x": 0.3419036000651526,
+        "y": 5.824763607483718
       },
       "nextControl": {
-        "x": 7.0368676691912295,
-        "y": 3.534942641207107
+        "x": 0.3569957225678735,
+        "y": 5.1861442130938915
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.356108597285068,
-        "y": 5.54244502969457
+        "x": 1.818710804934955,
+        "y": 4.991561483667986
       },
       "prevControl": {
-        "x": 6.336188772942923,
-        "y": 5.091525333707466
-      },
-      "nextControl": {
-        "x": 4.7904696456616795,
-        "y": 5.802686743014893
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.6999171468467198,
-        "y": 5.54244502969457
-      },
-      "prevControl": {
-        "x": 2.703590668965325,
-        "y": 5.331189393597541
+        "x": 1.2400927071549774,
+        "y": 5.1477887708569
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Shoot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5565792059748426,
-      "rotationDegrees": 180.0
-    },
-    {
-      "waypointRelativePos": 0.9803213443396227,
+      "waypointRelativePos": 0.8932537342767302,
       "rotationDegrees": -90.0
     }
   ],
@@ -91,7 +71,7 @@
   "eventMarkers": [
     {
       "name": "Turret Shoot",
-      "waypointRelativePos": 3.5171959156193893,
+      "waypointRelativePos": 2.400302962298026,
       "endWaypointRelativePos": 4.0,
       "command": null
     }
