@@ -32,28 +32,12 @@
     },
     {
       "anchor": {
-        "x": 0.35,
-        "y": 5.482166466346154
+        "x": 0.6401927495757922,
+        "y": 4.761348672582014
       },
       "prevControl": {
-        "x": 0.3419036000651526,
-        "y": 5.824763607483718
-      },
-      "nextControl": {
-        "x": 0.3569957225678735,
-        "y": 5.1861442130938915
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.818710804934955,
-        "y": 4.991561483667986
-      },
-      "prevControl": {
-        "x": 1.2400927071549774,
-        "y": 5.1477887708569
+        "x": 0.13167252898755688,
+        "y": 4.342003853223982
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,16 +46,34 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.8932537342767302,
+      "waypointRelativePos": 0.632149174528302,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 1.603970125786165,
       "rotationDegrees": -90.0
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.9991444120287253,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "Turret Shoot",
-      "waypointRelativePos": 2.400302962298026,
+      "waypointRelativePos": 1.7,
       "endWaypointRelativePos": 4.0,
       "command": null
     }
@@ -86,7 +88,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -30.962896919160222
+    "rotation": -17.190451011443667
   },
   "reversed": false,
   "folder": "Left",
