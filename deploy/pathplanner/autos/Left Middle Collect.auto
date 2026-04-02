@@ -5,37 +5,25 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Move to Fuel"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Lower Collector"
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Middle Collect"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "Run Collector Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pickup Fuel"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Turret Shoot"
                 }
               }
             ]
@@ -45,6 +33,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Left",
   "choreoAuto": false
 }

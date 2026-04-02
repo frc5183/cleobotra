@@ -1,0 +1,114 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.0,
+        "y": 7.433524639423077
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.828117001908937,
+        "y": 7.406110718325793
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.209480963659503,
+        "y": 6.833304051187784
+      },
+      "prevControl": {
+        "x": 7.518583971328255,
+        "y": 7.603794624260113
+      },
+      "nextControl": {
+        "x": 8.707173871906718,
+        "y": 6.278275301105198
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.767932471365951,
+        "y": 4.7723302725537335
+      },
+      "prevControl": {
+        "x": 8.454901873355537,
+        "y": 5.0736845868060945
+      },
+      "nextControl": {
+        "x": 6.9615864061523265,
+        "y": 4.418608746050834
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.356108597285068,
+        "y": 5.54244502969457
+      },
+      "prevControl": {
+        "x": 6.194591303082292,
+        "y": 5.381168228007401
+      },
+      "nextControl": {
+        "x": 4.850971339411865,
+        "y": 5.639604960125525
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.3097235135039598,
+        "y": 4.873729717548076
+      },
+      "prevControl": {
+        "x": 4.389566525968414,
+        "y": 5.2425527855105525
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9803213443396227,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Turret Shoot",
+      "waypointRelativePos": 3.5171959156193893,
+      "endWaypointRelativePos": 4.0,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -30.962896919160222
+  },
+  "reversed": false,
+  "folder": "Left",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}
