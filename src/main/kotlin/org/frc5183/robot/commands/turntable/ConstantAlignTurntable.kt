@@ -1,11 +1,13 @@
 package org.frc5183.robot.commands.turntable
 
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
-import edu.wpi.first.wpilibj.Timer
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import org.frc5183.robot.constants.AutoConstants
 import org.frc5183.robot.subsystems.turntable.TurntableSubsystem
-import org.frc5183.robot.target.TurntableTarget
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A command that will constantly align the turntable to be centered on the middle hub targets.
@@ -15,77 +17,38 @@ import org.frc5183.robot.target.TurntableTarget
  */
 class ConstantAlignTurntable(
     private val turntable: TurntableSubsystem,
+    private val poseSupplier: () -> Pose2d,
     private val kP: Double = AutoConstants.SHOOTER_ALIGN_KP,
     private val kI: Double = AutoConstants.SHOOTER_ALIGN_KI,
     private val kD: Double = AutoConstants.SHOOTER_ALIGN_KD,
 ) : Command() {
+    private val BLUE_HUB = Translation2d(Units.Meters.of(4.625), Units.Meters.of(4.025))
+    private val RED_HUB = Translation2d(Units.Meters.of(11.925), Units.Meters.of(4.025))
+
     init {
         addRequirements(turntable)
     }
-
-    var startLoss = true
-    val lossTimer = Timer()
-    var oscDirection = 0.25
 
     var integral = 0.0
     var previousError = 0.0
     val dt = 0.02 // loop time (20ms typical for FRC)
 
     override fun initialize() {
-        startLoss = true
-        lossTimer.reset()
-        lossTimer.start()
-
         integral = 0.0
         previousError = 0.0
-        oscDirection = 0.25
     }
 
     override fun execute() {
-        val targets =
-            turntable.targets.filter {
-                TurntableTarget.hubIds.contains(it.fiducialId)
-            }
+        val pose = poseSupplier()
+        val hub = if (DriverStation.getAlliance().getOrNull() ?: DriverStation.Alliance.Blue == DriverStation.Alliance.Blue) BLUE_HUB else RED_HUB
 
-        // We can't see any targets, just spin until we can.
-        if (targets.isEmpty() && (startLoss || lossTimer.hasElapsed(4.0))) {
-            oscillate()
-            return
-        } else if (targets.isEmpty()) {
-            lossTimer.restart()
-            turntable.stop()
-            return
-        }
+        val deltaTranslation = pose.translation - hub
 
-        val target = targets.minByOrNull { TurntableTarget.byId(it.fiducialId)?.weight ?: 0 }
+        val robotRelativeRotation = deltaTranslation.angle.minus(pose.rotation)
 
-        if (target == null) {
-            println("Target is null, this is not normal")
-            return
-        }
+        turntable.setAngle(robotRelativeRotation)
 
-        startLoss = false
 
-        val yaw = target.yaw
-
-        if (Math.abs(yaw) < AutoConstants.SHOOTER_ALIGN_DEADBAND.`in`(Units.Degrees)) {
-            turntable.stop()
-        } else {
-            val error = yaw
-
-            integral += error * dt
-
-            val integralLimit = 1.0
-            integral = integral.coerceIn(-integralLimit, integralLimit)
-
-            val derivative = (error - previousError) / dt
-
-            val turnPower = -(kP * error + kI * integral + kD * derivative)
-
-            turntable.setSpeed(turnPower)
-
-            previousError = error
-        }
     }
 
     private fun oscillate() {
