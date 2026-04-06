@@ -5,13 +5,7 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Lower Collector"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -23,16 +17,29 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Run Collector Intake"
+                  "name": "Lower Collector"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "Turret Shoot"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 10.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Locked Shoot"
+                }
+              }
+            ]
           }
         }
       ]

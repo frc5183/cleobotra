@@ -11,6 +11,7 @@
   "autoFolders": [
     "Left",
     "Middle",
+    "Right",
     "Test"
   ],
   "defaultMaxVel": 4.0,

@@ -5,13 +5,13 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left Shoot"
+                  "pathName": "Right Shoot"
                 }
               },
               {
@@ -46,6 +46,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Left",
+  "folder": "Right",
   "choreoAuto": false
 }
