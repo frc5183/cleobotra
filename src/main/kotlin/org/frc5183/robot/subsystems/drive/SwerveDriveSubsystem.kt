@@ -146,6 +146,8 @@ class SwerveDriveSubsystem(
 
     fun resetPose(pose: Pose2d = Pose2d.kZero) = drive.resetOdometry(pose)
 
+    fun lockWheels() = drive.lockPose()
+
     fun getTargetSpeeds(
         x: Double,
         y: Double,

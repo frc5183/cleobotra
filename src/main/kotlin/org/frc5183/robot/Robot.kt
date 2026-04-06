@@ -111,6 +111,7 @@ object Robot : LoggedRobot() {
         NamedCommands.registerCommand("Raise Collector", RaiseCollector(collector))
         NamedCommands.registerCommand("Run Collector Intake", IntakeCommand(collector))
         NamedCommands.registerCommand("Turret Shoot", AlignAndShoot(shooter, turntable))
+        NamedCommands.registerCommand("Locked Shoot", LockedShoot(shooter, turntable, drive))
 
         autoChooser = AutoBuilder.buildAutoChooser()
         SmartDashboard.putData("Auto Chooser", autoChooser)
