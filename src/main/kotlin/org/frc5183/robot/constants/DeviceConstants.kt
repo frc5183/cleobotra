@@ -19,7 +19,7 @@ object DeviceConstants {
     val COLLECTOR_INTAKE = SparkMax(56, SparkLowLevel.MotorType.kBrushed)
     val COLLECTOR_TOP_LIMIT_SWITCH = DigitalInput(2)
     val COLLECTOR_BOTTOM_LIMIT_SWITCH = DigitalInput(4)
-    val TURNTABLE_MOTOR = SparkMax(53, SparkLowLevel.MotorType.kBrushed)
+    val TURNTABLE_MOTOR = SparkMax(53, SparkLowLevel.MotorType.kBrushless)
 
     val TURNTABLE_CAMERA = PhotonCamera("Turntable")
     val TURNTABLE_CAMERA_HEIGHT = Units.Inches.of(20.5)
