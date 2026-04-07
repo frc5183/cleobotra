@@ -25,7 +25,7 @@ object DeviceConstants {
     val TURNTABLE_CAMERA_HEIGHT = Units.Inches.of(20.5)
     val TURNTABLE_CAMERA_PITCH = Units.Degrees.of(90.0)
     val TURNTABLE_LIMIT_SWITCH = DigitalInput(1)
-    val TURNTABLE_GEAR_RATIO = 200.0/32.0
+    val TURNTABLE_GEAR_RATIO = 625
     val TURNTABLE_ANGLE_OFFSET = Rotation2d.fromDegrees(3.0) // offset to face forward after zeroing at the left limit
 
     val CLIMBER_MOTOR: SparkMax = SparkMax(57, SparkLowLevel.MotorType.kBrushless)
