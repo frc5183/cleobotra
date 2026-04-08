@@ -1,6 +1,11 @@
 package org.frc5183.robot.subsystems.shooter
 
+import com.revrobotics.spark.SparkBase
 import com.revrobotics.spark.SparkMax
+import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.AngularVelocity
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 
@@ -27,10 +32,15 @@ class ShooterSubsystem(
         runFeeder(-1.0)
     }
 
+    fun shoot(velocity: AngularVelocity) {
+        runShooterVelocity(velocity)
+        runIntake(-1.0)
+        runFeeder(-1.0)
+    }
+
     fun runShooter(speed: Double) = shooter.set(-speed)
-
+    fun runShooterVelocity(velocity: AngularVelocity) = shooter.closedLoopController.setSetpoint(velocity.`in`(Units.RPM), SparkBase.ControlType.kVelocity)
     fun runIntake(speed: Double) = intake.set(-speed)
-
     fun runFeeder(speed: Double) = feeder.set(-speed)
 
     fun stop() {
@@ -40,8 +50,6 @@ class ShooterSubsystem(
     }
 
     fun stopShooter() = shooter.stopMotor()
-
     fun stopIntake() = intake.stopMotor()
-
     fun stopFeeder() = feeder.stopMotor()
 }

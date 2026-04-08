@@ -1,9 +1,17 @@
 package org.frc5183.robot.commands.shooter
 
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
+import org.frc5183.robot.constants.AutoConstants
 import org.frc5183.robot.subsystems.shooter.ShooterSubsystem
+import kotlin.math.cos
+import kotlin.math.pow
+import kotlin.math.sqrt
+import kotlin.math.tan
 
 class ShootByDistance(
     val shooter: ShooterSubsystem,
@@ -13,10 +21,61 @@ class ShootByDistance(
         addRequirements(shooter)
     }
 
+    val timer: Timer = Timer()
+
+    override fun initialize() {
+        timer.restart()
+    }
+
     override fun execute() {
-        shooter.runShooter(distanceToSpeed(distanceSupplier() ?: return))
+        val distance = distanceSupplier()
+
+        if (distance == null) {
+            shooter.stop()
+            return
+        }
+
+        val velocity = requiredMotorVelocity(distance)
+        if (velocity == null) {
+            shooter.stop()
+            return
+        }
+
+
+        if (timer.hasElapsed(1.0)) {
+            shooter.runShooterVelocity(velocity)
+        }
+
+        timer.restart()
         shooter.runFeeder(1.0)
         shooter.runIntake(1.0)
+    }
+
+    fun requiredMotorVelocity(
+        distance: Distance,
+        efficiency: Double = 0.8
+    ): AngularVelocity? {
+        val g = 9.81
+
+        val distanceMeters = distance.`in`(Units.Meters)
+        val hubHeightMeters = AutoConstants.HUB_HEIGHT.`in`(Units.Meters)
+        val shooterHeightMeters = AutoConstants.SHOOTER_HEIGHT.`in`(Units.Meters)
+        val wheelDiameterMeters = AutoConstants.SHOOTER_WHEEL_DIAMETER.`in`(Units.Meters)
+        val angleRad = AutoConstants.SHOOTER_SHOOT_ANGLE.`in`(Units.Radians)
+
+        val y = hubHeightMeters - shooterHeightMeters
+        val r = wheelDiameterMeters / 2.0
+
+        val denom = distanceMeters * tan(angleRad) - y
+        if (denom <= 0) return null
+
+        val v = sqrt((g * distanceMeters * distanceMeters) /
+                (2 * cos(angleRad).pow(2) * denom))
+
+        val adjustedV = v / efficiency
+
+        val wheelRPM = (adjustedV / r) * (60.0 / (2.0 * Math.PI))
+        return Units.Revolutions.per(Units.Minutes).of(wheelRPM)
     }
 
     private fun distanceToSpeed(distance: Distance): Double {
