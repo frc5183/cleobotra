@@ -2,18 +2,17 @@ package org.frc5183.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
-import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.hal.FRCNetComm
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.Threads
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import edu.wpi.first.wpilibj2.command.Commands
 import org.frc5183.robot.commands.collector.IntakeCommand
 import org.frc5183.robot.commands.collector.LowerCollector
 import org.frc5183.robot.commands.collector.RaiseCollector
@@ -30,7 +29,6 @@ import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
 import swervelib.SwerveDrive
-import kotlin.jvm.optionals.getOrNull
 
 object Robot : LoggedRobot() {
     private val drive: SwerveDriveSubsystem
@@ -118,10 +116,6 @@ object Robot : LoggedRobot() {
 
         autoChooser = AutoBuilder.buildAutoChooser()
         SmartDashboard.putData("Auto Chooser", autoChooser)
-
-        CommandScheduler.getInstance().onCommandInitialize { println("${it.name} initialized") }
-        CommandScheduler.getInstance().onCommandFinish { println("${it.name} finished") }
-        CommandScheduler.getInstance().onCommandInterrupt { command, action -> println("${command.name} interrupted by ${action.getOrNull()?.name}") }
     }
 
     override fun robotPeriodic() {
