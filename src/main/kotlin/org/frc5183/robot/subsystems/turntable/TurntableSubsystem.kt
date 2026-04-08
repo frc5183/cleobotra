@@ -27,7 +27,7 @@ class TurntableSubsystem(
         get() = motor.get()
 
     val angle: Rotation2d
-        get() = Rotation2d.fromRotations(motor.encoder.position / DeviceConstants.TURNTABLE_GEAR_RATIO) - DeviceConstants.TURNTABLE_ANGLE_OFFSET
+        get() = Rotation2d.fromRotations(-motor.encoder.position / DeviceConstants.TURNTABLE_GEAR_RATIO) - DeviceConstants.TURNTABLE_ANGLE_OFFSET
 
     var distanceToTarget: Distance? = null
         private set
@@ -65,6 +65,7 @@ class TurntableSubsystem(
             if (speedGoesLeft(speed) && !rightLimitReached) {
                 leftLimitReached = true
                 stop()
+                zero()
             } else if (speedGoesRight(speed) && !leftLimitReached) {
                 rightLimitReached = true
                 stop()
