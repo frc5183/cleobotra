@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import org.frc5183.robot.constants.AutoConstants
 import org.frc5183.robot.subsystems.turntable.TurntableSubsystem
+import org.littletonrobotics.junction.Logger
 import kotlin.jvm.optionals.getOrNull
+import kotlin.math.atan2
 
 /**
  * A command that will constantly align the turntable to be centered on the middle hub targets.
@@ -40,20 +42,38 @@ class ConstantAlignTurntable(
 
     override fun execute() {
         val pose = poseSupplier()
-        val hub =
-            if (DriverStation.getAlliance().getOrNull() ?: DriverStation.Alliance.Blue ==
-                DriverStation.Alliance.Blue
-            ) {
-                BLUE_HUB
-            } else {
-                RED_HUB
-            }
+        val hub = if (DriverStation.getAlliance().getOrNull() == DriverStation.Alliance.Red) RED_HUB else BLUE_HUB
 
-        val deltaTranslation = pose.translation - hub
+        val dx = hub.x - pose.x // m
+        val dy = hub.y - pose.y // m
+        val targetAngleFieldRelative = Units.Radians.of(atan2(dy, dx)) // rad
+        val targetAngleRobotRelative = targetAngleFieldRelative - pose.rotation.measure
+        val error = targetAngleRobotRelative - turntable.angle
 
-        val robotRelativeRotation = deltaTranslation.angle.minus(pose.rotation)
+        Logger.recordOutput("Turntable/Align/dx", dx)
+        Logger.recordOutput("Turntable/Align/dy", dy)
+        Logger.recordOutput("Turntable/Align/targetAngle/field", targetAngleFieldRelative)
+        Logger.recordOutput("Turntable/Align/targetAngle/robot", targetAngleRobotRelative)
+        Logger.recordOutput("Turntable/Align/targetAngle/error", error)
 
-        turntable.setAngle(robotRelativeRotation)
+        val errorDegrees = error.`in`(Units.Degrees)
+
+        if (Math.abs(errorDegrees) < AutoConstants.SHOOTER_ALIGN_DEADBAND.`in`(Units.Degrees)) {
+            turntable.stop()
+        } else {
+            integral += errorDegrees * dt
+
+            val integralLimit = 1.0
+            integral = integral.coerceIn(-integralLimit, integralLimit)
+
+            val derivative = (errorDegrees - previousError) / dt
+
+            val turnPower = -(kP * errorDegrees + kI * integral + kD * derivative)
+
+            turntable.setSpeed(turnPower)
+
+            previousError = errorDegrees
+        }
     }
 
     override fun end(interrupted: Boolean) {
