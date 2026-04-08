@@ -3,7 +3,6 @@ package org.frc5183.robot.constants
 import com.revrobotics.spark.SparkLowLevel
 import com.revrobotics.spark.SparkMax
 import com.studica.frc.AHRS.NavXComType
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.DigitalInput
 import org.photonvision.PhotonCamera
@@ -27,7 +26,7 @@ object DeviceConstants {
     val TURNTABLE_CAMERA_PITCH = Units.Degrees.of(2.75)
     val TURNTABLE_LIMIT_SWITCH = DigitalInput(1)
     val TURNTABLE_GEAR_RATIO = 625
-    val TURNTABLE_ANGLE_OFFSET = Rotation2d.fromDegrees(-22.530) // offset to face forward after zeroing at the left limit
+    val TURNTABLE_ANGLE_OFFSET = Units.Degrees.of(53.259) // offset to face forward after zeroing at the left limit
 
     val CLIMBER_MOTOR: SparkMax = SparkMax(57, SparkLowLevel.MotorType.kBrushless)
 }
