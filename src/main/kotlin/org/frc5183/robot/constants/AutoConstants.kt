@@ -18,9 +18,9 @@ object AutoConstants {
 
     val USE_FEED_FORWARD: Boolean = false
 
-    val SHOOTER_ALIGN_KP = 0.06
+    val SHOOTER_ALIGN_KP = 0.04
     val SHOOTER_ALIGN_KI = 0.00
-    val SHOOTER_ALIGN_KD = 0.02
+    val SHOOTER_ALIGN_KD = 0.00
     val SHOOTER_ALIGN_DEADBAND = Units.Degrees.of(1.0)
 
     val HUB_HEIGHT = Units.Meters.of(74.0) // From Floor
