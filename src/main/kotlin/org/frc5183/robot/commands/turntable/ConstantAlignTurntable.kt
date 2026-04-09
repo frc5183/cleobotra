@@ -50,13 +50,16 @@ class ConstantAlignTurntable(
         val targetAngleRobotRelative = targetAngleFieldRelative - pose.rotation.measure
         val error = targetAngleRobotRelative - turntable.angle
 
+        var errorDegrees = error.`in`(Units.Degrees)
+
+        while (errorDegrees > 180.0) errorDegrees -= 360.0
+        while (errorDegrees < -180.0) errorDegrees += 360.0
+
         Logger.recordOutput("Turntable/Align/dx", dx)
         Logger.recordOutput("Turntable/Align/dy", dy)
         Logger.recordOutput("Turntable/Align/targetAngle/field", targetAngleFieldRelative)
         Logger.recordOutput("Turntable/Align/targetAngle/robot", targetAngleRobotRelative)
-        Logger.recordOutput("Turntable/Align/targetAngle/error", error)
-
-        val errorDegrees = error.`in`(Units.Degrees)
+        Logger.recordOutput("Turntable/Align/targetAngle/error", errorDegrees)
 
         if (Math.abs(errorDegrees) < AutoConstants.SHOOTER_ALIGN_DEADBAND.`in`(Units.Degrees)) {
             turntable.stop()
