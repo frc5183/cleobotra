@@ -20,7 +20,7 @@
         "y": 5.065587086397058
       },
       "prevControl": {
-        "x": 1.4465563374744868,
+        "x": 1.4465563374744865,
         "y": 4.4622477327941255
       },
       "nextControl": {
@@ -70,7 +70,20 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Turret Shoot",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 2.0,
+      "command": null
+    },
+    {
+      "name": "Run Collector Intake",
+      "waypointRelativePos": 0.8093480934809352,
+      "endWaypointRelativePos": 2.0,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
