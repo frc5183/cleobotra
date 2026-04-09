@@ -60,7 +60,6 @@ class SwerveDriveSubsystem(
         drive.setModuleEncoderAutoSynchronize(true, 1.0)
 
         val guiSettings = RobotConfig.fromGUISettings()
-        val settings = AutoConstants.PATHPLANNER_CONFIG
 
         AutoBuilder.configure(
             { robotPose },
@@ -79,14 +78,12 @@ class SwerveDriveSubsystem(
             },
             PPHolonomicDriveController(
                 PIDConstants(1.0, 0.0, 0.0),
-                PIDConstants(1.0, 0.0, 0.0)
+                PIDConstants(1.0, 0.0, 0.0),
             ),
             guiSettings,
             { DriverStation.getAlliance().getOrNull() == DriverStation.Alliance.Red },
             this,
         )
-
-        diff(guiSettings, settings)
 
         Pathfinding.setPathfinder(LocalADStarAK())
 
@@ -95,22 +92,6 @@ class SwerveDriveSubsystem(
 
         if (vision != null) {
             drive.stopOdometryThread()
-        }
-    }
-
-    private fun diff(asd: RobotConfig, ads: RobotConfig) {
-        if (asd.massKG != ads.massKG) println("DIFF: MASS - ${asd.massKG} - ${ads.massKG}")
-        if (asd.MOI != ads.MOI) println("DIFF: MOI - ${asd.MOI} - ${ads.MOI}")
-        if (asd.maxTorqueFriction != ads.maxTorqueFriction) println("DIFF: MTF ${asd.maxTorqueFriction} - ${ads.maxTorqueFriction}")
-        if (asd.moduleConfig.wheelRadiusMeters != ads.moduleConfig.wheelRadiusMeters) println("DIFF: WHEELRADIUS ${asd.moduleConfig.wheelRadiusMeters} - ${ads.moduleConfig.wheelRadiusMeters}")
-        if (asd.moduleConfig.driveCurrentLimit != ads.moduleConfig.driveCurrentLimit) println("DIFF: CURRENT - ${asd.moduleConfig.driveCurrentLimit} - ${ads.moduleConfig.driveCurrentLimit}")
-        if (asd.moduleConfig.maxDriveVelocityMPS != ads.moduleConfig.maxDriveVelocityMPS) println("DIFF: MAXDRIVEVEL - ${asd.moduleConfig.maxDriveVelocityMPS}  - ${ads.moduleConfig.maxDriveVelocityMPS}")
-        if (asd.moduleConfig.wheelCOF != ads.moduleConfig.wheelCOF) println("DIFF: COF - ${asd.moduleConfig.wheelCOF} - ${ads.moduleConfig.wheelCOF}")
-        if (asd.moduleConfig.wheelRadiusMeters != ads.moduleConfig.wheelRadiusMeters) println("DIFF: WHEELRAD - ${asd.moduleConfig.wheelRadiusMeters} - ${ads.moduleConfig.wheelRadiusMeters}")
-        if (asd.moduleLocations.size != ads.moduleLocations.size) println("DIFF: MSIZE - ${asd.moduleLocations.size} - ${ads.moduleLocations.size}")
-
-        asd.moduleLocations.forEachIndexed { index, translation2d ->
-            if (translation2d != ads.moduleLocations[index]) println("DIFF: LOC[${index}] - ${translation2d} - ${ads.moduleLocations[index]}")
         }
     }
 
