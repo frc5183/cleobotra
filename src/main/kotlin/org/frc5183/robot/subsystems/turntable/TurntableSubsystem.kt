@@ -1,7 +1,10 @@
 package org.frc5183.robot.subsystems.turntable
 
+import com.revrobotics.spark.SparkBase
 import com.revrobotics.spark.SparkMax
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -24,6 +27,9 @@ class TurntableSubsystem(
     val speed: Double
         get() = motor.get()
 
+    val angle: Angle
+        get() = Units.Rotations.of(-motor.encoder.position / DeviceConstants.TURNTABLE_GEAR_RATIO) - DeviceConstants.TURNTABLE_ANGLE_OFFSET
+
     var distanceToTarget: Distance? = null
         private set
 
@@ -41,6 +47,7 @@ class TurntableSubsystem(
 
     override fun periodic() {
         Logger.recordOutput("Turntable/Speed", motor.get())
+        Logger.recordOutput("Turntable/Angle", angle.`in`(Units.Degrees))
         Logger.recordOutput("Turntable/Targets", targets.map { it.fiducialId }.toIntArray())
 
         Logger.recordOutput("Turntable/Hit Limit", limitSwitch.get())
@@ -59,6 +66,7 @@ class TurntableSubsystem(
             if (speedGoesLeft(speed) && !rightLimitReached) {
                 leftLimitReached = true
                 stop()
+                zero()
             } else if (speedGoesRight(speed) && !leftLimitReached) {
                 rightLimitReached = true
                 stop()
@@ -127,8 +135,16 @@ class TurntableSubsystem(
         motor.set(speed)
     }
 
+    fun setAngle(angle: Rotation2d) {
+        motor.closedLoopController.setSetpoint(angle.rotations * DeviceConstants.TURNTABLE_GEAR_RATIO, SparkBase.ControlType.kPosition)
+    }
+
     fun stop() {
         motor.stopMotor()
+    }
+
+    fun zero() {
+        motor.encoder.position = 0.0
     }
 
     fun speedGoesLeft(speed: Double) = speed > 0

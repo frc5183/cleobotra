@@ -9,7 +9,6 @@ import org.frc5183.robot.commands.collector.DriveCollector
 import org.frc5183.robot.commands.collector.IntakeCommand
 import org.frc5183.robot.commands.collector.LowerCollector
 import org.frc5183.robot.commands.collector.RaiseCollector
-import org.frc5183.robot.commands.drive.DriveTest
 import org.frc5183.robot.commands.shooter.ReverseShooter
 import org.frc5183.robot.commands.shooter.ShootByDistance
 import org.frc5183.robot.commands.shooter.ShootCommand
@@ -77,8 +76,6 @@ object Controls {
         turntable: TurntableSubsystem,
         climber: ClimberSubsystem,
     ) {
-        OPERATOR_CONTROLLER.a().toggleOnTrue(DriveTest(drive))
-
-        OPERATOR_CONTROLLER.povUp().toggleOnTrue(ConstantAlignTurntable(turntable))
+        OPERATOR_CONTROLLER.povUp().toggleOnTrue(ConstantAlignTurntable(turntable, { drive.robotPose }))
     }
 }

@@ -1,11 +1,15 @@
 package org.frc5183.robot.commands.turntable
 
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
-import edu.wpi.first.wpilibj.Timer
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import org.frc5183.robot.constants.AutoConstants
 import org.frc5183.robot.subsystems.turntable.TurntableSubsystem
-import org.frc5183.robot.target.TurntableTarget
+import org.littletonrobotics.junction.Logger
+import kotlin.jvm.optionals.getOrNull
+import kotlin.math.atan2
 
 /**
  * A command that will constantly align the turntable to be centered on the middle hub targets.
@@ -15,83 +19,61 @@ import org.frc5183.robot.target.TurntableTarget
  */
 class ConstantAlignTurntable(
     private val turntable: TurntableSubsystem,
+    private val poseSupplier: () -> Pose2d,
     private val kP: Double = AutoConstants.SHOOTER_ALIGN_KP,
     private val kI: Double = AutoConstants.SHOOTER_ALIGN_KI,
     private val kD: Double = AutoConstants.SHOOTER_ALIGN_KD,
 ) : Command() {
+    private val BLUE_HUB = Translation2d(Units.Meters.of(4.625), Units.Meters.of(4.025))
+    private val RED_HUB = Translation2d(Units.Meters.of(11.925), Units.Meters.of(4.025))
+
     init {
         addRequirements(turntable)
     }
-
-    var startLoss = true
-    val lossTimer = Timer()
-    var oscDirection = 0.25
 
     var integral = 0.0
     var previousError = 0.0
     val dt = 0.02 // loop time (20ms typical for FRC)
 
     override fun initialize() {
-        startLoss = true
-        lossTimer.reset()
-        lossTimer.start()
-
         integral = 0.0
         previousError = 0.0
-        oscDirection = 0.25
     }
 
     override fun execute() {
-        val targets =
-            turntable.targets.filter {
-                TurntableTarget.hubIds.contains(it.fiducialId)
-            }
+        val pose = poseSupplier()
+        val hub = if (DriverStation.getAlliance().getOrNull() == DriverStation.Alliance.Red) RED_HUB else BLUE_HUB
 
-        // We can't see any targets, just spin until we can.
-        if (targets.isEmpty() && (startLoss || lossTimer.hasElapsed(4.0))) {
-            oscillate()
-            return
-        } else if (targets.isEmpty()) {
-            lossTimer.restart()
-            turntable.stop()
-            return
-        }
+        val dx = hub.x - pose.x // m
+        val dy = hub.y - pose.y // m
+        val targetAngleFieldRelative = Units.Radians.of(atan2(dy, dx)) // rad
+        val targetAngleRobotRelative = targetAngleFieldRelative - pose.rotation.measure
+        val error = targetAngleRobotRelative - turntable.angle
 
-        val target = targets.minByOrNull { TurntableTarget.byId(it.fiducialId)?.weight ?: 0 }
+        Logger.recordOutput("Turntable/Align/dx", dx)
+        Logger.recordOutput("Turntable/Align/dy", dy)
+        Logger.recordOutput("Turntable/Align/targetAngle/field", targetAngleFieldRelative)
+        Logger.recordOutput("Turntable/Align/targetAngle/robot", targetAngleRobotRelative)
+        Logger.recordOutput("Turntable/Align/targetAngle/error", error)
 
-        if (target == null) {
-            println("Target is null, this is not normal")
-            return
-        }
+        val errorDegrees = error.`in`(Units.Degrees)
 
-        startLoss = false
-
-        val yaw = target.yaw
-
-        if (Math.abs(yaw) < AutoConstants.SHOOTER_ALIGN_DEADBAND.`in`(Units.Degrees)) {
+        if (Math.abs(errorDegrees) < AutoConstants.SHOOTER_ALIGN_DEADBAND.`in`(Units.Degrees)) {
             turntable.stop()
         } else {
-            val error = yaw
-
-            integral += error * dt
+            integral += errorDegrees * dt
 
             val integralLimit = 1.0
             integral = integral.coerceIn(-integralLimit, integralLimit)
 
-            val derivative = (error - previousError) / dt
+            val derivative = (errorDegrees - previousError) / dt
 
-            val turnPower = -(kP * error + kI * integral + kD * derivative)
+            val turnPower = -(kP * errorDegrees + kI * integral + kD * derivative)
 
             turntable.setSpeed(turnPower)
 
-            previousError = error
+            previousError = errorDegrees
         }
-    }
-
-    private fun oscillate() {
-        if (turntable.leftLimitReached) oscDirection = -0.25
-        if (turntable.rightLimitReached) oscDirection = 0.25
-        turntable.setSpeed(oscDirection)
     }
 
     override fun end(interrupted: Boolean) {
