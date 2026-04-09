@@ -6,9 +6,7 @@ import edu.wpi.first.hal.FRCNetComm
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.Threads
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -31,10 +29,6 @@ import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
 import swervelib.SwerveDrive
-import kotlin.jvm.optionals.getOrElse
-import kotlin.jvm.optionals.getOrNull
-import kotlin.math.atan
-import kotlin.math.atan2
 
 object Robot : LoggedRobot() {
     private val drive: SwerveDriveSubsystem
@@ -135,26 +129,9 @@ object Robot : LoggedRobot() {
     override fun teleopInit() {
         CommandScheduler.getInstance().cancelAll()
         Controls.registerControls(drive, shooter, collector, turntable, climber)
-        drive.resetPose(Pose2d(Translation2d(Units.Meters.of(2.930), Units.Meters.of(4.025)), Rotation2d.kZero))
     }
 
-    val BLUE_HUB = Translation2d(Units.Meters.of(4.625), Units.Meters.of(4.025))
-    val RED_HUB = Translation2d(Units.Meters.of(11.925), Units.Meters.of(4.025))
-
     override fun teleopPeriodic() {
-        val pose = drive.robotPose
-        val hub = if (DriverStation.getAlliance().getOrNull() == DriverStation.Alliance.Red) RED_HUB else BLUE_HUB
-
-        val dx = hub.x - pose.x // m
-        val dy = hub.y - pose.y // m
-        val targetAngleFieldRelative = atan2(dy, dx) // rad
-        val targetAngleRobotRelative = targetAngleFieldRelative - pose.rotation.radians
-
-        Logger.recordOutput("Turntable/Align/dx", dx)
-        Logger.recordOutput("Turntable/Align/dy", dy)
-        Logger.recordOutput("Turntable/Align/targetAngle/field", targetAngleFieldRelative)
-        Logger.recordOutput("Turntable/Align/targetAngle/robot", targetAngleRobotRelative)
-
 //        SmartDashboard.putBoolean("Turntable/Safety Override", turntable.safetyOverride)
 //        turntable.safetyOverride = SmartDashboard.getBoolean("Turntable/Safety Override", false)
     }
