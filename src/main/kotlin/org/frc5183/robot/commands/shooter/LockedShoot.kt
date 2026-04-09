@@ -1,6 +1,5 @@
 package org.frc5183.robot.commands.shooter
 
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.frc5183.robot.subsystems.drive.SwerveDriveSubsystem
@@ -10,7 +9,7 @@ import org.frc5183.robot.subsystems.turntable.TurntableSubsystem
 class LockedShoot(
     shooter: ShooterSubsystem,
     turntable: TurntableSubsystem,
-    drive: SwerveDriveSubsystem
+    drive: SwerveDriveSubsystem,
 ) : SequentialCommandGroup() {
     init {
         addRequirements(shooter)
@@ -18,8 +17,8 @@ class LockedShoot(
         addRequirements(drive)
 
         addCommands(
-            Commands.run({ drive.lockWheels() }, drive),
-            AlignAndShoot(shooter, turntable)
+            Commands.runOnce({ drive.lockWheels() }, drive),
+            AlignAndShoot(shooter, turntable),
         )
     }
 }
