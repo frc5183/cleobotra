@@ -23,8 +23,8 @@ class ShooterSubsystem(
 
     fun shoot(speed: Double) {
         runShooter(speed)
-        runIntake(-1.0)
-        runFeeder(-1.0)
+        runIntake(1.0)
+        runFeeder(1.0)
     }
 
     fun runShooter(speed: Double) = shooter.set(-speed)

@@ -49,10 +49,10 @@ class ConstantAlignTurntable(
 
         // We can't see any targets, just spin until we can.
         if (targets.isEmpty() && (startLoss || lossTimer.hasElapsed(4.0))) {
-            startLoss = false
             oscillate()
             return
         } else if (targets.isEmpty()) {
+            lossTimer.restart()
             turntable.stop()
             return
         }
@@ -63,6 +63,8 @@ class ConstantAlignTurntable(
             println("Target is null, this is not normal")
             return
         }
+
+        startLoss = false
 
         val yaw = target.yaw
 
