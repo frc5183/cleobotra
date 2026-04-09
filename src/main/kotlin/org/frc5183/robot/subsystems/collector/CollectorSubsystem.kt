@@ -10,6 +10,7 @@ class CollectorSubsystem(
     val arm: SparkMax,
     val intake: SparkMax,
     val topLimitSwitch: DigitalInput,
+    val otherTopLimitSwitch: DigitalInput,
     val bottomLimitSwitch: DigitalInput,
 ) : SubsystemBase() {
     val armSpeed: Double
@@ -22,7 +23,7 @@ class CollectorSubsystem(
         get() = intake.get()
 
     val topLimit: Boolean
-        get() = topLimitSwitch.get()
+        get() = topLimitSwitch.get() || otherTopLimitSwitch.get()
 
     val bottomLimit: Boolean
         get() = bottomLimitSwitch.get()
@@ -38,7 +39,9 @@ class CollectorSubsystem(
         Logger.recordOutput("Collector/IntakeSpeed", intakeSpeed)
 
         Logger.recordOutput("Collector/Bottom", bottomLimit)
-        Logger.recordOutput("Collector/Top", topLimit)
+        Logger.recordOutput("Collector/Top/Upper", topLimitSwitch.get())
+        Logger.recordOutput("Collector/Top/Lower", otherTopLimitSwitch.get())
+        Logger.recordOutput("Collector/Top/Limit", topLimit)
 
         if (topLimit && speedIsUp(armSpeed)) stopArm()
         if (bottomLimit && speedIsDown(armSpeed)) stopArm()
