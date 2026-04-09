@@ -18,6 +18,7 @@ import org.frc5183.robot.commands.collector.IntakeCommand
 import org.frc5183.robot.commands.collector.LowerCollector
 import org.frc5183.robot.commands.collector.RaiseCollector
 import org.frc5183.robot.commands.shooter.AlignAndShoot
+import org.frc5183.robot.commands.shooter.LockedShoot
 import org.frc5183.robot.constants.*
 import org.frc5183.robot.constants.swerve.SwerveConstants
 import org.frc5183.robot.subsystems.climber.ClimberSubsystem
@@ -121,7 +122,12 @@ object Robot : LoggedRobot() {
 
         CommandScheduler.getInstance().onCommandInitialize { println("${it.name} initialized") }
         CommandScheduler.getInstance().onCommandFinish { println("${it.name} finished") }
-        CommandScheduler.getInstance().onCommandInterrupt { command, action -> println("${command.name} interrupted by ${action.getOrNull()?.name}") }
+        CommandScheduler.getInstance().onCommandInterrupt {
+            command,
+            action,
+            ->
+            println("${command.name} interrupted by ${action.getOrNull()?.name}")
+        }
     }
 
     override fun robotPeriodic() {
@@ -139,6 +145,7 @@ object Robot : LoggedRobot() {
     }
 
     var autoCommand: PathPlannerAuto? = null
+
     override fun autonomousInit() {
         CommandScheduler.getInstance().cancelAll()
 
