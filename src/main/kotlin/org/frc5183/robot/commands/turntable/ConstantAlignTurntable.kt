@@ -40,21 +40,20 @@ class ConstantAlignTurntable(
 
     override fun execute() {
         val pose = poseSupplier()
-        val hub = if (DriverStation.getAlliance().getOrNull() ?: DriverStation.Alliance.Blue == DriverStation.Alliance.Blue) BLUE_HUB else RED_HUB
+        val hub =
+            if (DriverStation.getAlliance().getOrNull() ?: DriverStation.Alliance.Blue ==
+                DriverStation.Alliance.Blue
+            ) {
+                BLUE_HUB
+            } else {
+                RED_HUB
+            }
 
         val deltaTranslation = pose.translation - hub
 
         val robotRelativeRotation = deltaTranslation.angle.minus(pose.rotation)
 
         turntable.setAngle(robotRelativeRotation)
-
-
-    }
-
-    private fun oscillate() {
-        if (turntable.leftLimitReached) oscDirection = -0.25
-        if (turntable.rightLimitReached) oscDirection = 0.25
-        turntable.setSpeed(oscDirection)
     }
 
     override fun end(interrupted: Boolean) {

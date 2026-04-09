@@ -2,6 +2,7 @@ package org.frc5183.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
+import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.hal.FRCNetComm
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.geometry.Pose2d
@@ -13,10 +14,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import edu.wpi.first.wpilibj2.command.Commands
 import org.frc5183.robot.commands.collector.IntakeCommand
 import org.frc5183.robot.commands.collector.LowerCollector
 import org.frc5183.robot.commands.collector.RaiseCollector
 import org.frc5183.robot.commands.shooter.AlignAndShoot
+import org.frc5183.robot.commands.shooter.LockedShoot
 import org.frc5183.robot.constants.*
 import org.frc5183.robot.constants.swerve.SwerveConstants
 import org.frc5183.robot.subsystems.climber.ClimberSubsystem
@@ -133,11 +136,11 @@ object Robot : LoggedRobot() {
     }
 
     var autoCommand: PathPlannerAuto? = null
+
     override fun autonomousInit() {
         CommandScheduler.getInstance().cancelAll()
 
         autoCommand = PathPlannerAuto(autoChooser.selected)
-        autoCommand?.isRunning?.whileTrue(Commands.print("${autoChooser.selected.name} started"))
 
         autoCommand?.schedule()
     }
