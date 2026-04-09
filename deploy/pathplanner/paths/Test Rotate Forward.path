@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5142576028622536,
-        "y": 7.369
+        "x": 2.0,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.3588704413211039,
-        "y": 6.345032085753554
+        "x": 2.488496390691793,
+        "y": 6.771093255960184
       },
       "isLocked": false,
-      "linkedName": "Fuel Pickup Start"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.5142576028622536,
-        "y": 5.0004114490161
+        "x": 4.0,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 0.3374356134485769,
-        "y": 5.231357738537796
+        "x": 3.7645008087252245,
+        "y": 7.0839054879547625
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Test",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

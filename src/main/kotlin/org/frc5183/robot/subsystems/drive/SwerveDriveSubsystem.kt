@@ -2,6 +2,8 @@ package org.frc5183.robot.subsystems.drive
 
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.commands.PathfindingCommand
+import com.pathplanner.lib.config.PIDConstants
+import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.pathfinding.Pathfinding
 import com.pathplanner.lib.util.DriveFeedforwards
@@ -22,8 +24,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.frc5183.robot.constants.AutoConstants
 import org.frc5183.robot.constants.PhysicalConstants
 import org.frc5183.robot.constants.swerve.SwerveConstants
-import org.frc5183.robot.constants.swerve.SwervePIDConstants
-import org.frc5183.robot.constants.swerve.toPathPlannerPIDConstants
 import org.frc5183.robot.math.pathfinding.LocalADStarAK
 import org.frc5183.robot.subsystems.vision.VisionSubsystem
 import swervelib.SwerveDrive
@@ -54,10 +54,13 @@ class SwerveDriveSubsystem(
     init {
         SwerveDriveTelemetry.verbosity = SwerveConstants.VERBOSITY
 
-        drive.headingCorrection = false
+        drive.headingCorrection = true
         drive.setCosineCompensator(false)
-        drive.setAngularVelocityCompensation(true, false, 0.1)
+        drive.setAngularVelocityCompensation(true, true, 0.1)
         drive.setModuleEncoderAutoSynchronize(true, 1.0)
+
+        val guiSettings = RobotConfig.fromGUISettings()
+        val settings = AutoConstants.PATHPLANNER_CONFIG
 
         AutoBuilder.configure(
             { robotPose },
@@ -73,20 +76,17 @@ class SwerveDriveSubsystem(
                 } else {
                     driveRobotOriented(robotRelativeSpeeds)
                 }
-                drive(
-                    robotRelativeSpeeds,
-                    kinematics.toSwerveModuleStates(robotRelativeSpeeds),
-                    feedforwards.linearForces(),
-                )
             },
             PPHolonomicDriveController(
-                SwervePIDConstants.DRIVE_PID.toPathPlannerPIDConstants(),
-                SwervePIDConstants.ANGLE_PID.toPathPlannerPIDConstants(),
+                PIDConstants(1.0, 0.0, 0.0),
+                PIDConstants(1.0, 0.0, 0.0)
             ),
-            AutoConstants.PATHPLANNER_CONFIG,
+            guiSettings,
             { DriverStation.getAlliance().getOrNull() == DriverStation.Alliance.Red },
             this,
         )
+
+        diff(guiSettings, settings)
 
         Pathfinding.setPathfinder(LocalADStarAK())
 
@@ -95,6 +95,22 @@ class SwerveDriveSubsystem(
 
         if (vision != null) {
             drive.stopOdometryThread()
+        }
+    }
+
+    private fun diff(asd: RobotConfig, ads: RobotConfig) {
+        if (asd.massKG != ads.massKG) println("DIFF: MASS - ${asd.massKG} - ${ads.massKG}")
+        if (asd.MOI != ads.MOI) println("DIFF: MOI - ${asd.MOI} - ${ads.MOI}")
+        if (asd.maxTorqueFriction != ads.maxTorqueFriction) println("DIFF: MTF ${asd.maxTorqueFriction} - ${ads.maxTorqueFriction}")
+        if (asd.moduleConfig.wheelRadiusMeters != ads.moduleConfig.wheelRadiusMeters) println("DIFF: WHEELRADIUS ${asd.moduleConfig.wheelRadiusMeters} - ${ads.moduleConfig.wheelRadiusMeters}")
+        if (asd.moduleConfig.driveCurrentLimit != ads.moduleConfig.driveCurrentLimit) println("DIFF: CURRENT - ${asd.moduleConfig.driveCurrentLimit} - ${ads.moduleConfig.driveCurrentLimit}")
+        if (asd.moduleConfig.maxDriveVelocityMPS != ads.moduleConfig.maxDriveVelocityMPS) println("DIFF: MAXDRIVEVEL - ${asd.moduleConfig.maxDriveVelocityMPS}  - ${ads.moduleConfig.maxDriveVelocityMPS}")
+        if (asd.moduleConfig.wheelCOF != ads.moduleConfig.wheelCOF) println("DIFF: COF - ${asd.moduleConfig.wheelCOF} - ${ads.moduleConfig.wheelCOF}")
+        if (asd.moduleConfig.wheelRadiusMeters != ads.moduleConfig.wheelRadiusMeters) println("DIFF: WHEELRAD - ${asd.moduleConfig.wheelRadiusMeters} - ${ads.moduleConfig.wheelRadiusMeters}")
+        if (asd.moduleLocations.size != ads.moduleLocations.size) println("DIFF: MSIZE - ${asd.moduleLocations.size} - ${ads.moduleLocations.size}")
+
+        asd.moduleLocations.forEachIndexed { index, translation2d ->
+            if (translation2d != ads.moduleLocations[index]) println("DIFF: LOC[${index}] - ${translation2d} - ${ads.moduleLocations[index]}")
         }
     }
 
@@ -129,6 +145,8 @@ class SwerveDriveSubsystem(
     fun setMotorBrake(brake: Boolean) = drive.setMotorIdleMode(brake)
 
     fun resetPose(pose: Pose2d = Pose2d.kZero) = drive.resetOdometry(pose)
+
+    fun lockWheels() = drive.lockPose()
 
     fun getTargetSpeeds(
         x: Double,

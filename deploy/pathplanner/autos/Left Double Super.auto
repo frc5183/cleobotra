@@ -5,40 +5,34 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Lower Collector"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Move Under Trench"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Trench Collect"
+                  "pathName": "Left Double Super"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Run Collector Intake"
+                  "name": "Lower Collector"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Locked Shoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Left",
   "choreoAuto": false
 }
