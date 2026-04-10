@@ -14,7 +14,7 @@ object DeviceConstants {
     val SHOOTER_INTAKE = SparkMax(52, SparkLowLevel.MotorType.kBrushless)
     val FEEDER = SparkMax(54, SparkLowLevel.MotorType.kBrushless)
 
-    val COLLECTOR_ARM = SparkMax(55, SparkLowLevel.MotorType.kBrushed)
+    val COLLECTOR_ARM = SparkMax(55, SparkLowLevel.MotorType.kBrushless)
     val COLLECTOR_INTAKE = SparkMax(56, SparkLowLevel.MotorType.kBrushed)
     val COLLECTOR_TOP_LIMIT_SWITCH = DigitalInput(2)
     val COLLECTOR_OTHER_TOP_LIMIT_SWITCH = DigitalInput(0)
