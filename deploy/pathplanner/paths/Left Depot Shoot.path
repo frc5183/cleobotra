@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
+        "x": 3.65,
         "y": 7.433524639423077
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.181045452463328,
+        "x": 3.831045452463328,
         "y": 7.261122365243331
       },
       "isLocked": false,
@@ -72,28 +72,50 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Lower Collector",
+      "name": "Startup",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "Home Turntable",
-      "waypointRelativePos": 0.15593220338983027,
-      "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Lower Collector"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Home Turntable"
+              }
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Turret Shoot",
       "waypointRelativePos": 0.3837638376383765,
       "endWaypointRelativePos": 2.0,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Turret Shoot"
+        }
+      }
     },
     {
       "name": "Run Collector Intake",
       "waypointRelativePos": 0.8093480934809368,
       "endWaypointRelativePos": 1.8327183271832652,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Run Collector Intake"
+        }
+      }
     }
   ],
   "globalConstraints": {

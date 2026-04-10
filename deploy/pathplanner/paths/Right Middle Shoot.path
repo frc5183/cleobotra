@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
+        "x": 3.675,
         "y": 0.68
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.61613500032795,
+        "x": 4.29113500032795,
         "y": 0.5477130540240573
       },
       "isLocked": false,
@@ -111,22 +111,39 @@
   ],
   "eventMarkers": [
     {
-      "name": "Lower Collector",
+      "name": "Startup",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "Home Turntable",
-      "waypointRelativePos": 0.42877580789946135,
-      "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Lower Collector"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Home Turntable"
+              }
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Run Collector Intake",
       "waypointRelativePos": 0.8265682656826541,
       "endWaypointRelativePos": 2.622386223862237,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Run Collector Intake"
+        }
+      }
     }
   ],
   "globalConstraints": {
