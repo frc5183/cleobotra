@@ -68,8 +68,10 @@ object Controls {
         OPERATOR_CONTROLLER.leftStick().toggleOnTrue(DriveCollector(collector) { OPERATOR_CONTROLLER.leftY })
         OPERATOR_CONTROLLER.rightStick().toggleOnTrue(DriveTurntable(turntable) { OPERATOR_CONTROLLER.rightX })
 
-        OPERATOR_CONTROLLER.leftTrigger().whileTrue(LowerClimber(climber))
         OPERATOR_CONTROLLER.rightTrigger().whileTrue(RaiseClimber(climber))
+        OPERATOR_CONTROLLER.leftTrigger().whileTrue(LowerClimber(climber))
+
+        DRIVER_CONTROLLER.rightTrigger().whileTrue(Commands.run({ drive.lockWheels() }, drive))
 
         DRIVER_CONTROLLER.b().onTrue(InstantCommand({ CommandScheduler.getInstance().cancelAll() }))
         OPERATOR_CONTROLLER.b().onTrue(InstantCommand({ CommandScheduler.getInstance().cancelAll() }))
