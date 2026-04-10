@@ -72,7 +72,7 @@
         "y": 6.322163676956659
       },
       "nextControl": {
-        "x": 1.5901633561280064,
+        "x": 1.5901633561280062,
         "y": 4.593805763354499
       },
       "isLocked": false,
@@ -152,7 +152,7 @@
         "y": 7.519496623098324
       },
       "nextControl": {
-        "x": 0.06276012866487193,
+        "x": 0.06276012866487182,
         "y": 7.1125303848202295
       },
       "isLocked": false,
@@ -164,7 +164,7 @@
         "y": 2.962410297652715
       },
       "prevControl": {
-        "x": 0.322367611708145,
+        "x": 0.32236761170814493,
         "y": 3.291297193156108
       },
       "nextControl": {
@@ -310,6 +310,18 @@
     }
   ],
   "eventMarkers": [
+    {
+      "name": "Lower Collector",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Home Turntable",
+      "waypointRelativePos": 0.5834338532315972,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
     {
       "name": "Run Collector Intake",
       "waypointRelativePos": 0.8544167975763016,

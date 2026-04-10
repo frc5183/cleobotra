@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5721731603288047,
-        "y": 4.895969535865676
+        "x": 3.0124187376272626,
+        "y": 6.013852251838236
       },
       "isLocked": false,
       "linkedName": "Middle Start"
@@ -20,12 +20,12 @@
         "y": 5.065587086397058
       },
       "prevControl": {
-        "x": 1.4465563374744863,
-        "y": 4.4622477327941255
+        "x": 0.5625059741642287,
+        "y": 4.752779059147325
       },
       "nextControl": {
-        "x": -0.32210000707013553,
-        "y": 5.397199342477376
+        "x": -0.04194897129524855,
+        "y": 5.487657266332015
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 7.463703999930915
       },
       "prevControl": {
-        "x": 0.5523584443047264,
-        "y": 7.507207636288039
+        "x": 0.18950628358314514,
+        "y": 7.50205944216629
       },
       "nextControl": null,
       "isLocked": false,
@@ -72,8 +72,20 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "Lower Collector",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Home Turntable",
+      "waypointRelativePos": 0.1678916068222621,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "Turret Shoot",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.31882574057450647,
       "endWaypointRelativePos": 2.0,
       "command": null
     },
@@ -100,7 +112,7 @@
   "folder": "Middle",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

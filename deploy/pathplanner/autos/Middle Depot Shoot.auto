@@ -5,54 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Middle Depot Shoot"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Lower Collector"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Home Turntable"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
+            "pathName": "Middle Depot Shoot"
           }
         },
         {
-          "type": "deadline",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 10.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Locked Shoot"
-                }
-              }
-            ]
+            "name": "Locked Shoot"
           }
         }
       ]

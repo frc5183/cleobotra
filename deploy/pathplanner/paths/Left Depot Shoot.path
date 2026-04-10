@@ -72,9 +72,21 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "Lower Collector",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "Turret Shoot",
       "waypointRelativePos": 0.3837638376383765,
       "endWaypointRelativePos": 2.0,
+      "command": null
+    },
+    {
+      "name": "Home Turntable",
+      "waypointRelativePos": 0.5888408886894073,
+      "endWaypointRelativePos": null,
       "command": null
     },
     {
