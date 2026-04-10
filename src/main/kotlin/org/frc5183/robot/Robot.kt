@@ -21,6 +21,7 @@ import org.frc5183.robot.commands.collector.LowerCollector
 import org.frc5183.robot.commands.collector.RaiseCollector
 import org.frc5183.robot.commands.shooter.AlignAndShoot
 import org.frc5183.robot.commands.shooter.LockedShoot
+import org.frc5183.robot.commands.turntable.HomeTurntable
 import org.frc5183.robot.constants.*
 import org.frc5183.robot.constants.swerve.SwerveConstants
 import org.frc5183.robot.subsystems.climber.ClimberSubsystem
@@ -116,8 +117,9 @@ object Robot : LoggedRobot() {
         NamedCommands.registerCommand("Lower Collector", LowerCollector(collector))
         NamedCommands.registerCommand("Raise Collector", RaiseCollector(collector))
         NamedCommands.registerCommand("Run Collector Intake", IntakeCommand(collector))
-        NamedCommands.registerCommand("Turret Shoot", AlignAndShoot(shooter, turntable))
+        NamedCommands.registerCommand("Turret Shoot", AlignAndShoot(shooter, turntable, { drive.robotPose }))
         NamedCommands.registerCommand("Locked Shoot", LockedShoot(shooter, turntable, drive))
+        NamedCommands.registerCommand("Home Turntable", HomeTurntable(turntable))
 
         autoChooser = AutoBuilder.buildAutoChooser()
         SmartDashboard.putData("Auto Chooser", autoChooser)
@@ -129,6 +131,8 @@ object Robot : LoggedRobot() {
             }
 
         controlsProfile.onChange { changeControls(it) }
+
+        SmartDashboard.putData("Controls Profile", controlsProfile)
     }
 
     fun changeControls(profile: String) {

@@ -60,8 +60,8 @@ object Controls {
 
         OPERATOR_CONTROLLER.x().toggleOnTrue(ReverseShooter(shooter))
 
-        OPERATOR_CONTROLLER.rightBumper().onTrue(LowerCollector(collector))
-        OPERATOR_CONTROLLER.leftBumper().onTrue(RaiseCollector(collector))
+        OPERATOR_CONTROLLER.leftBumper().whileTrue(LowerCollector(collector))
+        OPERATOR_CONTROLLER.rightBumper().whileTrue(RaiseCollector(collector))
         OPERATOR_CONTROLLER.y().toggleOnTrue(IntakeCommand(collector))
         OPERATOR_CONTROLLER.leftStick().toggleOnTrue(DriveCollector(collector) { OPERATOR_CONTROLLER.leftY })
         OPERATOR_CONTROLLER.rightStick().toggleOnTrue(DriveTurntable(turntable) { OPERATOR_CONTROLLER.rightX })

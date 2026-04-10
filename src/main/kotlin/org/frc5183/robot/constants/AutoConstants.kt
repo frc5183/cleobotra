@@ -26,5 +26,5 @@ object AutoConstants {
     val HUB_HEIGHT = Units.Inches.of(74.0) // From Floor
     val SHOOTER_HEIGHT = Units.Inches.of(19.0) // From Floor
     val SHOOTER_WHEEL_DIAMETER = Units.Inches.of(4.0)
-    val SHOOTER_SHOOT_ANGLE = Units.Degrees.of(15.0) // todo
+    val SHOOTER_SHOOT_ANGLE = Units.Degrees.of(67.0) // todo
 }

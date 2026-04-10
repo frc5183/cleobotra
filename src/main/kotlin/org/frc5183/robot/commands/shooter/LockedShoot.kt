@@ -11,6 +11,6 @@ class LockedShoot(
     turntable: TurntableSubsystem,
     drive: SwerveDriveSubsystem,
 ) : ParallelDeadlineGroup(
-        AlignAndShoot(shooter, turntable),
+        AlignAndShoot(shooter, turntable, { drive.robotPose }),
         Commands.run({ drive.lockWheels() }, drive),
     )
