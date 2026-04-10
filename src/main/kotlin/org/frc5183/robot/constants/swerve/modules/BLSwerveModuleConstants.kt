@@ -19,6 +19,6 @@ object BLSwerveModuleConstants : SwerveModuleConstants {
     override val ANGLE_MOTOR_INVERTED: Boolean = false
 
     override val ABSOLUTE_ENCODER: SwerveAbsoluteEncoder = CANCoderSwerve(33)
-    override val ABSOLUTE_ENCODER_OFFSET: Angle = Units.Rotations.of(0.309)
+    override val ABSOLUTE_ENCODER_OFFSET: Angle = Units.Degrees.of(162.158)
     override val ABSOLUTE_ENCODER_INVERTED: Boolean = false
 }

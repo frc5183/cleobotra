@@ -1,6 +1,8 @@
 package org.frc5183.robot.constants
 
+import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import org.frc5183.robot.commands.climber.LowerClimber
@@ -127,5 +129,10 @@ object Controls {
         climber: ClimberSubsystem,
     ) {
         // This is intentionally left blank for feature branches to use as needed.
+
+        OPERATOR_CONTROLLER.a().whileTrue(Commands.run({shooter.runShooterVelocity(Units.RPM.of(1000.0))}, shooter))
+
+        DRIVER_CONTROLLER.b().onTrue(InstantCommand({ CommandScheduler.getInstance().cancelAll() }))
+        OPERATOR_CONTROLLER.b().onTrue(InstantCommand({ CommandScheduler.getInstance().cancelAll() }))
     }
 }

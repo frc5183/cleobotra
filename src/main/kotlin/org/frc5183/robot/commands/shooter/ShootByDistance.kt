@@ -1,21 +1,19 @@
 package org.frc5183.robot.commands.shooter
 
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
 import org.frc5183.robot.constants.AutoConstants
 import org.frc5183.robot.subsystems.shooter.ShooterSubsystem
-import kotlin.math.cos
-import kotlin.math.pow
-import kotlin.math.sqrt
-import kotlin.math.tan
+import org.frc5183.robot.target.HubTarget
+import kotlin.math.*
 
 class ShootByDistance(
     val shooter: ShooterSubsystem,
-    val distanceSupplier: () -> Distance?,
+    val poseSupplier: () -> Pose2d,
 ) : Command() {
     init {
         addRequirements(shooter)
@@ -28,7 +26,7 @@ class ShootByDistance(
     }
 
     override fun execute() {
-        val distance = distanceSupplier()
+        val distance = calculateDistance()
 
         val velocity = requiredMotorVelocity(distance)
 
@@ -46,6 +44,16 @@ class ShootByDistance(
         
         shooter.runFeeder(1.0)
         shooter.runIntake(1.0)
+    }
+
+    fun calculateDistance(): Distance {
+        val pose = poseSupplier()
+        val hub = HubTarget.get().translation
+
+        val dx = hub.x - pose.x // m
+        val dy = hub.y - pose.y // m
+        
+        return Units.Meters.of(hypot(dx, dy))
     }
 
     fun requiredMotorVelocity(

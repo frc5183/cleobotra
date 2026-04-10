@@ -3,12 +3,11 @@ package org.frc5183.robot.commands.turntable
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import org.frc5183.robot.constants.AutoConstants
 import org.frc5183.robot.subsystems.turntable.TurntableSubsystem
+import org.frc5183.robot.target.HubTarget
 import org.littletonrobotics.junction.Logger
-import kotlin.jvm.optionals.getOrNull
 import kotlin.math.atan2
 
 class AlignTurntable(
@@ -39,12 +38,16 @@ class AlignTurntable(
 
     override fun execute() {
         val pose = poseSupplier()
-        val hub = if (DriverStation.getAlliance().getOrNull() == DriverStation.Alliance.Red) RED_HUB else BLUE_HUB
+        val hub = HubTarget.get().translation
 
         val dx = hub.x - pose.x // m
         val dy = hub.y - pose.y // m
         val targetAngleFieldRelative = Units.Radians.of(atan2(dy, dx)) // rad
         val targetAngleRobotRelative = targetAngleFieldRelative - pose.rotation.measure
+
+        if (targetAngleRobotRelative >= AutoConstants.SHOOTER_ANGLE_MAX) return
+        if (targetAngleRobotRelative <= AutoConstants.SHOOTER_ANGLE_MIN) return
+
         val error = targetAngleRobotRelative - turntable.angle
 
         var errorDegrees = error.`in`(Units.Degrees)
