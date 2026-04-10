@@ -30,31 +30,30 @@ class ShootByDistance(
     override fun execute() {
         val distance = distanceSupplier()
 
-        if (distance == null) {
-            shooter.stop()
-            return
-        }
-
         val velocity = requiredMotorVelocity(distance)
-        if (velocity == null) {
+
+        if (distance == null || velocity == null) {
             shooter.stop()
+            timer.restart()
             return
         }
 
-
-        if (timer.hasElapsed(1.0)) {
-            shooter.runShooterVelocity(velocity)
+        shooter.runShooterVelocity(velocity)
+        
+        if (!timer.hasElapsed(1.0)) {
+            return
         }
-
-        timer.restart()
+        
         shooter.runFeeder(1.0)
         shooter.runIntake(1.0)
     }
 
     fun requiredMotorVelocity(
-        distance: Distance,
+        distance: Distance?,
         efficiency: Double = 0.8
     ): AngularVelocity? {
+        if (distance == null) return null
+        
         val g = 9.81
 
         val distanceMeters = distance.`in`(Units.Meters)

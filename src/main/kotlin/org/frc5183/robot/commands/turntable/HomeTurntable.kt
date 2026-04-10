@@ -14,7 +14,6 @@ class HomeTurntable(val turntable: TurntableSubsystem) : Command() {
 
     override fun end(interrupted: Boolean) {
         turntable.stop()
-        turntable.zero()
     }
 
     override fun isFinished(): Boolean = turntable.leftLimitReached
