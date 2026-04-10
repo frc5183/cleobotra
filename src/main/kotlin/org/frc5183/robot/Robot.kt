@@ -8,6 +8,7 @@ import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.Threads
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -41,6 +42,7 @@ object Robot : LoggedRobot() {
     private val climber: ClimberSubsystem
 
     private val autoChooser: SendableChooser<Command>
+    private val controlsProfile: SendableChooser<String>
 
     init {
         HAL.report(
@@ -119,6 +121,42 @@ object Robot : LoggedRobot() {
 
         autoChooser = AutoBuilder.buildAutoChooser()
         SmartDashboard.putData("Auto Chooser", autoChooser)
+
+        controlsProfile =
+            SendableChooser<String>().apply {
+                addOption(Controls.ControlProfiles.MANUAL.toString(), Controls.ControlProfiles.MANUAL.toString())
+                setDefaultOption(Controls.ControlProfiles.AUTONOMOUS.toString(), Controls.ControlProfiles.AUTONOMOUS.toString())
+            }
+
+        controlsProfile.onChange { changeControls(it) }
+    }
+
+    fun changeControls(profile: String) {
+        if (!Robot.isTeleopEnabled) return
+
+        CommandScheduler.getInstance().activeButtonLoop.clear()
+
+        when (profile) {
+            Controls.ControlProfiles.AUTONOMOUS.toString() -> {
+                Controls.registerControlsAutonomousProfile(
+                    drive,
+                    shooter,
+                    collector,
+                    turntable,
+                    climber,
+                )
+            }
+
+            Controls.ControlProfiles.MANUAL.toString() -> {
+                Controls.registerControlsManualProfile(
+                    drive,
+                    shooter,
+                    collector,
+                    turntable,
+                    climber,
+                )
+            }
+        }
     }
 
     override fun robotPeriodic() {
@@ -127,12 +165,16 @@ object Robot : LoggedRobot() {
 
     override fun teleopInit() {
         CommandScheduler.getInstance().cancelAll()
-        Controls.registerControls(drive, shooter, collector, turntable, climber)
+        changeControls(controlsProfile.selected)
     }
 
     override fun teleopPeriodic() {
 //        SmartDashboard.putBoolean("Turntable/Safety Override", turntable.safetyOverride)
 //        turntable.safetyOverride = SmartDashboard.getBoolean("Turntable/Safety Override", false)
+    }
+
+    override fun teleopExit() {
+        CommandScheduler.getInstance().activeButtonLoop.clear()
     }
 
     var autoCommand: PathPlannerAuto? = null
@@ -145,12 +187,13 @@ object Robot : LoggedRobot() {
         autoCommand?.schedule()
     }
 
-    override fun autonomousPeriodic() {
-    }
-
     override fun testInit() {
         CommandScheduler.getInstance().cancelAll()
         Controls.registerTestingControls(drive, shooter, collector, turntable, climber)
+    }
+
+    override fun testExit() {
+        CommandScheduler.getInstance().activeButtonLoop.clear()
     }
 
     override fun printWatchdogEpochs() {
