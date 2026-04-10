@@ -108,22 +108,39 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Lower Collector",
-      "waypointRelativePos": 0,
+      "name": "Startup",
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "Home Turntable",
-      "waypointRelativePos": 0.5268177737881513,
-      "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Lower Collector"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Home Turntable"
+              }
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Run Collector Intake",
       "waypointRelativePos": 0.9544895448954525,
       "endWaypointRelativePos": 2.430504305043056,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Run Collector Intake"
+        }
+      }
     }
   ],
   "globalConstraints": {

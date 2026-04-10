@@ -9,7 +9,7 @@ class HomeTurntable(val turntable: TurntableSubsystem) : Command() {
     }
 
     override fun initialize() {
-        turntable.setSpeed(0.35)
+        turntable.setSpeed(0.65)
     }
 
     override fun end(interrupted: Boolean) {

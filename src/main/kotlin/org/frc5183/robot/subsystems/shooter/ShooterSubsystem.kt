@@ -33,13 +33,13 @@ class ShooterSubsystem(
 
     fun shoot(velocity: AngularVelocity) {
         runShooterVelocity(velocity)
-        runIntake(-1.0)
-        runFeeder(-1.0)
+        runIntake(1.0)
+        runFeeder(1.0)
     }
 
     fun runShooter(speed: Double) = shooter.set(-speed)
-    fun runShooterVelocity(velocity: AngularVelocity) = shooter.closedLoopController.setSetpoint(velocity.`in`(Units.RPM), SparkBase.ControlType.kVelocity)
-    fun runIntake(speed: Double) = intake.set(-speed)
+    fun runShooterVelocity(velocity: AngularVelocity) = shooter.closedLoopController.setSetpoint(-velocity.`in`(Units.RPM), SparkBase.ControlType.kVelocity)
+    fun runIntake(speed: Double) = intake.set(speed)
     fun runFeeder(speed: Double) = feeder.set(-speed)
 
     fun stop() {
