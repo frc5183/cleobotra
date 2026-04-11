@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import org.frc5183.robot.constants.AutoConstants
 import org.frc5183.robot.subsystems.shooter.ShooterSubsystem
 import org.frc5183.robot.target.HubTarget
+import org.littletonrobotics.junction.Logger
 import kotlin.math.*
 
 class ShootByDistance(
@@ -27,6 +28,8 @@ class ShootByDistance(
 
     override fun execute() {
         val distance = calculateDistance()
+
+        Logger.recordOutput("Shooter/DistanceEst", distance.`in`(Units.Inches))
 
         val velocity = requiredMotorVelocity(distance)
 
@@ -82,7 +85,7 @@ class ShootByDistance(
         val adjustedV = v / efficiency
 
         val wheelRPM = (adjustedV / r) * (60.0 / (2.0 * Math.PI))
-        return Units.Revolutions.per(Units.Minutes).of(wheelRPM)
+        return Units.Revolutions.per(Units.Minutes).of(wheelRPM) * 2.0
     }
 
     private fun distanceToSpeed(distance: Distance): Double {

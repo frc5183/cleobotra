@@ -11,7 +11,7 @@ class RaiseCollector(
     }
 
     override fun initialize() {
-        collector.runArm(.5)
+        collector.runArm(.7)
     }
 
     override fun end(interrupted: Boolean) {

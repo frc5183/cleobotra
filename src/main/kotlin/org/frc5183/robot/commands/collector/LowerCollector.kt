@@ -11,7 +11,7 @@ class LowerCollector(
     }
 
     override fun initialize() {
-        collector.runArm(-0.5)
+        collector.runArm(-0.7)
     }
 
     override fun end(interrupted: Boolean) {

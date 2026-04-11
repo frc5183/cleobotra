@@ -132,7 +132,8 @@ object Controls {
     ) {
         // This is intentionally left blank for feature branches to use as needed.
 
-        OPERATOR_CONTROLLER.a().whileTrue(Commands.run({shooter.runShooterVelocity(Units.RPM.of(3000.0))}, shooter))
+        OPERATOR_CONTROLLER.a().whileTrue(Commands.run({shooter.runShooterVelocity(Units.RPM.of(1000.0))}, shooter))
+        OPERATOR_CONTROLLER.y().onTrue(Commands.run({shooter.stop()}, shooter))
 
         DRIVER_CONTROLLER.b().onTrue(InstantCommand({ CommandScheduler.getInstance().cancelAll() }))
         OPERATOR_CONTROLLER.b().onTrue(InstantCommand({ shooter.stop(); CommandScheduler.getInstance().cancelAll() }))
